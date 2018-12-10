@@ -1,0 +1,15 @@
+{
+  "lerna": "3.5.1",
+  "version": "independent",
+  "npmClient": "yarn",
+  "npmClientArgs": [],
+  "command": {
+    "bootstrap": {
+      "scope": ["@wdtk/*"]
+    },
+    "publish": {
+      "npmClient": "npm"
+    }
+  },
+  "useWorkspaces": true
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@wdtk/cli",
+  "version": "0.0.2",
+  "description": "Development Toolkit CLI",
+  "homepage": "https://github.com/exosys/",
+  "author": "bogdant74",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exosys/wdtk.git"
+  },
+  "bin": {
+    "wx": "./bin/wx"
+  },
+  "engines": {
+    "node": ">=6.4.0"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf lib *.tgz",
+    "lint": "tslint --config tslint.js --project tsconfig.json",
+    "build": "npm run clean && tsc",
+    "watch": "tsc -w --preserveWatchOutput",
+    "test": "jest --maxWorkers=4",
+    "prepublishOnly": "npm run build"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{ts,tsx}": "npm run lint"
+    },
+    "ignore": []
+  },
+  "keywords": [
+    "wx"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "10.12.12"
+  },
+  "gitHead": "bd701a2df9d9a8ac4bb4e70a73f6b1a641138a7b"
+}
