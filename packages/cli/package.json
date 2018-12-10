@@ -1,6 +1,6 @@
 {
   "name": "@wdtk/cli",
-  "version": "0.0.2",
+  "version": "0.0.2-alpha.7+9051cc1",
   "description": "Development Toolkit CLI",
   "homepage": "https://github.com/exosys/",
   "author": "bogdant74",
