@@ -9,7 +9,7 @@ os:
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.12.3
   - export PATH="$HOME/.yarn/bin:$PATH"
-  - yarn global add makeshift && makeshift -s @wdtk -r https://registry.npmjs.org
+  - printf "@wdtk:registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${NPM_TOKEN}\n" >> ~/.npmrc
 
 install: yarn
 
