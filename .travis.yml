@@ -1,3 +1,6 @@
+# don't build tags
+if: tag IS blank
+
 language: node_js
 
 node_js:
