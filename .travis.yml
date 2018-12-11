@@ -12,7 +12,7 @@ before_install:
   - echo "@wdtk:registry=https://registry.npmjs.org\n" > ~/.npmrc 2> /dev/null
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> ~/.npmrc 2> /dev/null
   - npm whoami
-  - git status
+  - git checkout master
 
 install: yarn
 
