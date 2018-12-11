@@ -7,8 +7,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "ci": "npm run publish:canary",
-    "publish:canary": "lerna publish --canary --exact --bump=prerelease --no-git-tag-version"
+    "ci": "publish",
+    "publish:canary": "lerna publish --canary --exact --bump=prerelease --no-git-tag-version",
+    "publish": "lerna publish from-git --yes --npm-client yarn --npm-tag beta"
   },
   "workspaces": {
     "packages": [
