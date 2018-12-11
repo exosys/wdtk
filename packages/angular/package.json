@@ -2,6 +2,10 @@
   "name": "@wdtk/angular",
   "version": "0.0.1",
   "description": "Schematics and builders for @wdtk/angular apps.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exosys/wdtk.git"
+  },
   "publishConfig": {
     "access": "public"
   }
