@@ -1,0 +1,8 @@
+{
+  "name": "@wdtk/angular",
+  "version": "0.0.0",
+  "description":"Schematics and builders for @wdtk/angular apps.",
+  "publishConfig": {
+    "access": "public"
+  }
+}
