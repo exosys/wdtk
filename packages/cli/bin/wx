@@ -1,3 +1,22 @@
 #!/usr/bin/env node
 'use strict';
-console.error('initial implementation');
+
+try {
+  process.title = 'wx ';
+} catch (_) {
+  process.title = 'wx';
+}
+var version = process.version.substr(1).split('.');
+
+if (Number(version[0]) < 8 || (Number(version[0]) === 8 && Number(version[1]) < 9)) {
+  process.stderr.write(
+    'You are running version ' +
+      process.version +
+      ' of Node.js, which is not supported by wdtk CLI v1.\n' +
+      'The official Node.js version that is supported is 8.9 and greater.\n\n' +
+      'Please visit https://nodejs.org/en/ to find instructions on how to update Node.js.\n'
+  );
+
+  process.exit(3);
+}
+require('../lib/init');

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "wx://command/definitions.json",
+  "definitions": {
+    "base": {
+      "type": "object",
+      "properties": {
+        "help": {
+          "enum": [true, false, "json", "JSON"],
+          "description": "Shows a help message for this command in the console.",
+          "default": false
+        }
+      }
+    }
+  }
+}

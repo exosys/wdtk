@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "wx://command/version/schema.json",
+  "description": "Outputs WX version.",
+  "$longDescription": "",
+
+  "$aliases": ["v"],
+  "$scope": "all",
+  "$impl": "./index#VersionCommand",
+
+  "type": "object",
+  "allOf": [{ "$ref": "../definitions.json#/definitions/base" }]
+}
