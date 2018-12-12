@@ -1,8 +1,7 @@
 import { Schema as VersionCommandSchema } from './schema';
-import { Command } from '../../core/command';
-export class VersionCommand extends Command<VersionCommandSchema> {
+import { AbstractCommand } from '../../core/command';
+export class VersionCommand extends AbstractCommand<VersionCommandSchema> {
   async run() {
-    console.error('Something');
-    console.error(`Node: ${process.versions.node}`);
+    this.logger.info(`Node: ${process.versions.node}`);
   }
 }

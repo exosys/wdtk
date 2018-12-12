@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import 'symbol-observable';
-console.error('hello from' + process.title);
 
 let cli;
 cli = require('./cli');

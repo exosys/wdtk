@@ -11,6 +11,14 @@
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["generate", "app", "sample"],
       "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "wx (version)",
+      "program": "${workspaceFolder}/packages/cli/bin/wx",
+      "args": ["--version"],
+      "outputCapture": "std"
     }
   ]
 }
