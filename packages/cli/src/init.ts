@@ -16,7 +16,6 @@ if ('default' in cli) {
 
 cli({ cliArgs: process.argv.slice(2) })
   .then((exitCode: number) => {
-    console.log(`exit code ${exitCode}`);
     process.exit(exitCode);
   })
   .catch((error: Error) => {
