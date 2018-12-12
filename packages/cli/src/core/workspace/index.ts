@@ -8,30 +8,10 @@
 import { CommandWorkspace } from './../command';
 import { normalize } from '@angular-devkit/core';
 import * as fs from 'fs';
-import { existsSync } from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-
-export function findUp(names: string | string[], from: string) {
-  if (!Array.isArray(names)) {
-    names = [names];
-  }
-  const root = path.parse(from).root;
-
-  let currentDir = from;
-  while (currentDir && currentDir !== root) {
-    for (const name of names) {
-      const p = path.join(currentDir, name);
-      if (existsSync(p)) {
-        return p;
-      }
-    }
-
-    currentDir = path.dirname(currentDir);
-  }
-
-  return null;
-}
+import { findUp } from './util';
+export { findUp };
 
 export function insideWorkspace(): boolean {
   return getWorkspaceDetails() !== null;
