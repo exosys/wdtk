@@ -1,5 +1,5 @@
 {
-  "name": "@wdtk/angular",
+  "name": "@wdtk/schematics",
   "version": "0.0.1",
   "description": "Schematics and builders for @wdtk/angular apps.",
   "repository": {
@@ -8,5 +8,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "schematics": "./collection.json",
+  "dependencies": {
+    "@angular-devkit/schematics": "7.1.0",
+    "@schematics/angular": "7.1.0"
   }
 }

@@ -11,6 +11,32 @@
           "default": false
         }
       }
+    },
+    "schematic": {
+      "properties": {
+        "dryRun": {
+          "type": "boolean",
+          "default": false,
+          "aliases": ["d"],
+          "description": "When true, runs through and reports activity without writing out results."
+        },
+        "force": {
+          "type": "boolean",
+          "default": false,
+          "aliases": ["f"],
+          "description": "When true, forces overwriting of existing files."
+        },
+        "interactive": {
+          "type": "boolean",
+          "default": "true",
+          "description": "When false, disables interactive input prompts."
+        },
+        "defaults": {
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, disables interactive input prompts for options with a default."
+        }
+      }
     }
   }
 }
