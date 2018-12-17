@@ -12,7 +12,7 @@
       "args": ["generate", "ng-app", "sample"],
       "outputCapture": "std"
     },
-    ,
+
     {
       "type": "node",
       "request": "launch",
@@ -20,7 +20,7 @@
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["help"],
       "outputCapture": "std"
-    }
+    },
     {
       "type": "node",
       "request": "launch",
@@ -28,6 +28,16 @@
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["--version"],
       "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "args": ["--runInBand", "--no-cache"],
+      "cwd": "${workspaceFolder}/packages/schematics",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest"
     }
   ]
 }

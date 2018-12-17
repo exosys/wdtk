@@ -9,7 +9,7 @@
   },
   "schematics": "./collection.json",
   "scripts": {
-    "clean": "rimraf lib *.tgz",
+    "clean": "rimraf lib *.tgz .cache",
     "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
     "watch": "yarn run-p ~~watch:*",
     "test": "jest --maxWorkers=4",
