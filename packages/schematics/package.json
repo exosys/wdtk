@@ -2,16 +2,30 @@
   "name": "@wdtk/schematics",
   "version": "0.0.1",
   "description": "Schematics and builders for @wdtk/angular apps.",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/exosys/wdtk.git"
   },
+  "schematics": "./collection.json",
+  "scripts": {
+    "clean": "rimraf lib *.tgz",
+    "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
+    "watch": "yarn run-p ~~watch:*",
+    "~~compile": "tsc",
+    "~~sync-resources": "cpx src/**/*.{json,md} ./lib",
+    "~~watch:compile": "tsc -w --preserveWatchOutput",
+    "~~watch:sync-resources": "yarn ~~sync-resources --watch"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "schematics": "./collection.json",
   "dependencies": {
     "@angular-devkit/schematics": "7.1.0",
     "@schematics/angular": "7.1.0"
+  },
+  "devDependencies": {
+    "cpx": "1.5.0",
+    "npm-run-all": "4.1.5"
   }
 }

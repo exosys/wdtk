@@ -2,8 +2,9 @@
   "schematics": {
     "application": {
       "description": "Generates an angular application.",
-      "aliases": ["app"],
-      "extends": "@schematics/angular:application"
+      "aliases": ["ng-app"],
+      "factory": "./lib/collection/ng-app",
+      "schema": "./lib/collection/ng-app/schema.json"
     },
     "library": {
       "aliases": ["lib"],

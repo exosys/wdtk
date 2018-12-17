@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "wx (generate)",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
-      "args": ["generate", "app", "sample"],
+      "args": ["generate", "ng-app", "sample"],
       "outputCapture": "std"
     },
     ,

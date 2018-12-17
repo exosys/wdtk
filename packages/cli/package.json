@@ -4,6 +4,7 @@
   "description": "Development Toolkit CLI",
   "homepage": "https://github.com/exosys/",
   "author": "bogdant74",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/exosys/wdtk.git"
@@ -28,8 +29,8 @@
     "prepublishOnly": "yarn run build",
     "~~compile": "yarn run clean && tsc",
     "~~sync-resources": "cpx src/**/*.{json,md} ./lib",
-    "~~watch:sources": "tsc -w --preserveWatchOutput",
-    "~~watch:resources": "yarn ~~sync-resources --watch"
+    "~~watch:compile": "tsc -w --preserveWatchOutput",
+    "~~watch:sync-resources": "yarn ~~sync-resources --watch"
   },
   "lint-staged": {
     "linters": {
