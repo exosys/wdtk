@@ -1,3 +1,8 @@
-export interface Schema {
-  name: string;
+import { Schema as ApplicationOptions } from '@schematics/angular/application/schema';
+export interface Schema extends ApplicationOptions {
+  skipFormat: boolean;
+  directory?: string;
+  tags?: string;
+  unitTestRunner: UnitTestRunner;
+  e2eTestRunner: E2eTestRunner;
 }
