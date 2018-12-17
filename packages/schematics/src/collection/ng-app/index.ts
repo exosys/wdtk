@@ -1,4 +1,6 @@
 import { Rule, Tree, chain, externalSchematic, move } from '@angular-devkit/schematics';
+import { parseJsonAst, JsonAstObject, parseJson, JsonParseMode, JsonAstString } from '@angular-devkit/core';
+import { findPropertyInAstObject } from '@schematics/angular/utility/json-utils';
 import { Schema as Options } from './schema';
 import { toFileName } from './../../util/string';
 import { getWorkspace } from '@schematics/angular/utility/config';
@@ -24,9 +26,53 @@ export default function(opts: Options): Rule {
     return chain([
       externalSchematic('@schematics/angular', 'app', opts),
       move(appProjectRoot, (<NormalizedOptions>opts).appProjectRoot),
+      updateAppProject(<NormalizedOptions>opts),
       move(e2eProjectRoot, (<NormalizedOptions>opts).e2eProjectRoot)
     ]);
   };
+}
+
+function updateAppProject(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {
+    //see updateWorkspace(workspace: WorkspaceSchema): Rule;
+    let workspace = getWorkspace(tree);
+    let t = workspace.projects['sample'];
+    // tree.beginUpdate();
+    t.root = 'sample2';
+  };
+}
+
+function updateAppProjectx(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {
+    const packageJsonAst = readPackageJson(tree);
+    const t = findPropertyInAstObject(packageJsonAst, 'projects');
+    const x = findPropertyInAstObject(<JsonAstObject>t!, 'sample');
+    const y = findPropertyInAstObject(<JsonAstObject>x!, 'root');
+
+    const recorder = tree.beginUpdate('angular.json');
+    const { end, start } = <JsonAstString>y;
+    recorder.remove(start.offset, end.offset - start.offset);
+    recorder.insertRight(start.offset, JSON.stringify('sample'));
+    tree.commitUpdate(recorder);
+  };
+}
+
+function readPackageJson(tree: Tree): JsonAstObject {
+  const buffer = tree.read('angular.json');
+  if (buffer === null) {
+    //FIXME
+    throw new Error();
+    debugger;
+  }
+
+  const content = buffer.toString();
+
+  const packageJson = parseJsonAst(content, JsonParseMode.Strict);
+  if (packageJson.kind != 'object') {
+    //FIXME
+    throw new Error('Invalid package.json. Was expecting an object');
+  }
+  return packageJson;
 }
 
 function normalizeOptions(tree: Tree, opts: Options): NormalizedOptions {
