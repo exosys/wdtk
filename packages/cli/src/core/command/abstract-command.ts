@@ -8,6 +8,7 @@
 import { logging, strings, tags, terminal } from '@angular-devkit/core';
 import { CommandContext, CommandWorkspace, CommandDescription, CommandDescriptionMap } from './defs';
 import { Arguments, Option, SubCommandDescription, CommandScope } from './defs';
+import { getWorkspace } from './../../util/config';
 export interface BaseCommandOptions {
   help?: boolean | string;
 }
@@ -45,7 +46,7 @@ export abstract class AbstractCommand<T extends BaseCommandOptions = BaseCommand
         break;
       case CommandScope.InProject:
         //FIXME
-        if (!this.workspace.configFile /*|| getWorkspace('local') === null*/) {
+        if (!this.workspace.configFile || getWorkspace('local') === null) {
           this.logger.fatal(tags.oneLine`
             The ${this.description.name} command requires to be run in an Angular project, but a
             project definition could not be found.

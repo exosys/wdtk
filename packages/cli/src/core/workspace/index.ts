@@ -22,7 +22,11 @@ export function getWorkspaceDetails(): CommandWorkspace | null {
   const possibleConfigFiles = ['angular.json', '.angular.json', 'angular-cli.json', '.angular-cli.json'];
   const configFilePath = findUp(possibleConfigFiles, currentDir);
   if (configFilePath === null) {
-    return null;
+    // avoid null workspace
+    //return null;
+    return {
+      root: currentDir
+    };
   }
   const configFileName = path.basename(configFilePath);
 
