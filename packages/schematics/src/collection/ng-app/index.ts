@@ -13,7 +13,7 @@ interface NormalizedOptions extends Options {
 }
 
 export default function(opts: Options): Rule {
-  //just a comment and something else
+  
   return (tree: Tree) => {
     console.error('here');
     opts = normalizeOptions(tree, opts);
