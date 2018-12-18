@@ -1,6 +1,6 @@
 {
   "name": "@wdtk/cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Development Toolkit CLI",
   "homepage": "https://github.com/exosys/",
   "author": "bogdant74",
@@ -41,17 +41,16 @@
   "keywords": [
     "wx"
   ],
-  "license": "MIT",
   "dependencies": {
-    "@wdtk/schematics": "^0.0.1",
     "@angular-devkit/core": "7.1.0",
     "@angular-devkit/schematics": "7.1.0",
+    "@wdtk/schematics": "^0.0.2",
     "inquirer": "6.2.0",
     "symbol-observable": "1.2.0"
   },
   "devDependencies": {
-    "@types/node": "10.12.12",
     "@types/inquirer": "0.0.43",
+    "@types/node": "10.12.12",
     "cpx": "1.5.0",
     "npm-run-all": "4.1.5"
   },
