@@ -1,6 +1,6 @@
 {
   "name": "@wdtk/cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Development Toolkit CLI",
   "homepage": "https://github.com/exosys/",
   "author": "bogdant74",
@@ -44,7 +44,7 @@
   "dependencies": {
     "@angular-devkit/core": "7.1.0",
     "@angular-devkit/schematics": "7.1.0",
-    "@wdtk/schematics": "^0.0.2",
+    "@wdtk/schematics": "^0.0.3",
     "inquirer": "6.2.0",
     "symbol-observable": "1.2.0"
   },
