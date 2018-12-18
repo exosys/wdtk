@@ -13,7 +13,7 @@
     "build": "lerna run --concurrency 5 --stream build",
     "ci": "yarn publish:main",
     "publish:canary": "lerna publish --canary --exact --bump=prerelease --no-git-tag-version",
-    "publish:main": "lerna publish --skip-git --npm-tag beta",
+    "publish:main": "lerna publish from-package",
     "~~release": "lerna version",
     "release:patch": "yarn ~~release patch",
     "changelog": "DO NOT USE -chan release --group-changes 0.0.1",
