@@ -1,6 +1,6 @@
 {
   "schematics": {
-    "application": {
+    "ng-application": {
       "description": "Generates an angular application.",
       "aliases": ["ng-app"],
       "factory": "./lib/collection/ng-app",
