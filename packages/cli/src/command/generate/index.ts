@@ -16,6 +16,7 @@ import { Schema as GenerateCommandSchema } from './schema';
 export class GenerateCommand extends SchematicCommand<GenerateCommandSchema> {
   async initialize(options: GenerateCommandSchema & Arguments) {
     await super.initialize(options);
+    // some comment
 
     // Fill up the schematics property of the command description.
     const [collectionName, schematicName] = this.parseSchematicInfo(options);
