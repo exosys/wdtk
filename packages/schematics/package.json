@@ -13,6 +13,7 @@
     "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
     "watch": "yarn run-p ~~watch:*",
     "test": "jest --maxWorkers=4",
+    "prepublishOnly": "yarn run build",
     "~~compile": "tsc",
     "~~sync-resources": "cpx src/**/*.{json,md} ./lib",
     "~~watch:compile": "tsc -w --preserveWatchOutput",
