@@ -7,6 +7,10 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "clean": "lerna run --concurrency 5 --stream clean",
+    "clean-all": "yarn clean && lerna clean --yes && node ./scripts/rimraf ./node_modules",
+    "watch": "lerna run --parallel watch",
+    "build": "lerna run --concurrency 5 --stream build",
     "ci": "yarn publish:main",
     "publish:canary": "lerna publish --canary --exact --bump=prerelease --no-git-tag-version",
     "publish:main": "lerna publish --skip-git --npm-tag beta",
