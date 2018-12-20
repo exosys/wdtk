@@ -1,5 +1,11 @@
 {
   "schematics": {
+    "workspace": {
+      "factory": "./lib/collection/workspace",
+      "schema": "./lib/collection/workspace/schema.json",
+      "description": "Create an wx workspace.",
+      "hidden": true
+    },
     "ng-application": {
       "description": "Generates an angular application.",
       "aliases": ["ng-app"],
