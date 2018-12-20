@@ -10,7 +10,7 @@
       "name": "wx (new)",
       "cwd": "${workspaceFolder}/work",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
-      "args": ["new"],
+      "args": ["new", "sample", "--debug=true"],
       "outputCapture": "std"
     },
     {

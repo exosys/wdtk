@@ -1,0 +1,15 @@
+{
+  "lerna": "<%= versions.lerna %>",
+  "version": "independent",
+  "npmClient": "yarn",
+  "npmClientArgs": [],
+  "command": {
+    "bootstrap": {
+      "scope": ["@<%= name %>/*"]
+    },
+    "publish": {
+      "npmClient": "npm"
+    }
+  },
+  "useWorkspaces": true
+}

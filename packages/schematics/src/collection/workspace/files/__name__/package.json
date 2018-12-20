@@ -1,0 +1,17 @@
+{
+  "name": "<%= utils.dasherize(name) %>",
+  "version": "0.0.0",
+  "license": "MIT",
+  "wx": {},
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "lerna": "<%= versions.lerna %>"
+  }
+}
