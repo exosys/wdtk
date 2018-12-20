@@ -14,6 +14,11 @@
     },
     "schematic": {
       "properties": {
+        "debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, adds additional logging to the output."
+        },
         "dryRun": {
           "type": "boolean",
           "default": false,
