@@ -15,7 +15,7 @@
     "test": "jest --maxWorkers=4",
     "prepublishOnly": "yarn run build",
     "~~compile": "tsc",
-    "~~sync-resources": "cpx src/**/*.{json,md} ./lib",
+    "~~sync-resources": "cpx src/**/*.{json,md} ./lib && cpx src/**/__dot__* ./lib",
     "~~watch:compile": "tsc -w --preserveWatchOutput",
     "~~watch:sync-resources": "yarn ~~sync-resources --watch"
   },
