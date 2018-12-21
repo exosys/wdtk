@@ -12,6 +12,12 @@
       "factory": "./lib/collection/ng-app",
       "schema": "./lib/collection/ng-app/schema.json"
     },
+    "ng-library": {
+      "description": "Generates an angular library.",
+      "aliases": ["ng-lib"],
+      "factory": "./lib/collection/ng-lib",
+      "schema": "./lib/collection/ng-lib/schema.json"
+    },
     "library": {
       "aliases": ["lib"],
       "extends": "@schematics/angular:library"

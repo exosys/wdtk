@@ -16,13 +16,21 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "wx (generate)",
+      "name": "wx (generate app)",
       "cwd": "${workspaceFolder}/work/sample",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["generate", "ng-app", "www"],
       "outputCapture": "std"
     },
-
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "wx (generate lib)",
+      "cwd": "${workspaceFolder}/work/sample",
+      "program": "${workspaceFolder}/packages/cli/bin/wx",
+      "args": ["generate", "ng-lib", "common"],
+      "outputCapture": "std"
+    },
     {
       "type": "node",
       "request": "launch",
