@@ -13,6 +13,21 @@
         "index": 0
       }
     },
+    "newPackageRoot": {
+      "description": "When true, does not install packages for dependencies.",
+      "type": "string",
+      "default": "pkg"
+    },
+    "appPackageRoot": {
+      "description": "The path where new applications will be created.",
+      "type": "string",
+      "default": "app"
+    },
+    "libPackageRoot": {
+      "description": "The path where new libraries will be created.",
+      "type": "string",
+      "default": "lib"
+    },
     "newProjectRoot": {
       "description": "The path where new projects will be created.",
       "type": "string",

@@ -4,9 +4,6 @@
   "npmClient": "yarn",
   "npmClientArgs": [],
   "command": {
-    "bootstrap": {
-      "scope": ["@<%= name %>/*"]
-    },
     "publish": {
       "npmClient": "npm"
     }

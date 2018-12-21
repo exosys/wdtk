@@ -17,7 +17,7 @@
       "type": "node",
       "request": "launch",
       "name": "wx (generate)",
-      "cwd": "${workspaceFolder}/work",
+      "cwd": "${workspaceFolder}/work/sample",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["generate", "ng-app", "sample"],
       "outputCapture": "std"

@@ -2,10 +2,24 @@
   "name": "<%= utils.dasherize(name) %>",
   "version": "0.0.0",
   "license": "MIT",
-  "wx": {},
+  "wx": {
+    "newPackageRoot": "<%= utils.dasherize(newPackageRoot) %>",
+    "appPackageRoot": "<%= utils.dasherize(appPackageRoot) %>",
+    "libPackageRoot": "<%= utils.dasherize(libPackageRoot) %>"
+  },
   "workspaces": {
     "packages": [
-      "packages/*"
+      <%= workspaces %>
+    ],
+    "nohoist": [
+      "**/electron-builder",
+      "**/electron-builder/**",
+      "**/electron-compile",
+      "**/electron-compile/**",
+      "**/electron-log",
+      "**/electron-log/**",
+      "**/electron-updater",
+      "**/electron-updater/**"
     ]
   },
   "scripts": {},
