@@ -2,7 +2,7 @@ module.exports = {
   bail: true,
   globals: {
     'ts-jest': {
-      tsConfig: './tsconfig.spec.json',
+      tsConfig: '<rootDir>/tsconfig.spec.json',
       useExperimentalLanguageServer: true
     }
   },
@@ -12,7 +12,7 @@ module.exports = {
   testRegex: '.*spec.ts$',
   moduleFileExtensions: ['ts', 'js', 'json'],
   transformIgnorePatterns: ['/node_modules/'],
-  modulePathIgnorePatterns: ['/node_modules/'],
+  modulePathIgnorePatterns: ['/node_modules/', '/files/'],
   projects: ['<rootDir>'],
   collectCoverageFrom: ['./src/**/*.ts'],
   coveragePathIgnorePatterns: ['.*(spec|const|config|mock|module|public-api|index|mock|model).ts'],

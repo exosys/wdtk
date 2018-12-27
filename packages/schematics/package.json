@@ -12,7 +12,7 @@
     "clean": "rimraf lib *.tgz .cache",
     "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
     "watch": "yarn run-p ~~watch:*",
-    "test": "jest --maxWorkers=4",
+    "test": "yarn build && jest --maxWorkers=4",
     "prepublishOnly": "yarn run build",
     "~~compile": "tsc",
     "~~sync-resources": "cpx \"src/**/+(__dot__*|*.{json,md})\" ./lib",

@@ -3,7 +3,7 @@ import { strings, join } from '@angular-devkit/core';
 import { Schema } from './schema';
 import { toFileName } from '../../util/string';
 import { versions } from './../../versions';
-import { workspace } from '@angular-devkit/core/src/experimental';
+
 export default function(schema: Schema): Rule {
   const opts = normalizeSchema(schema);
   let workspaces: any = [];

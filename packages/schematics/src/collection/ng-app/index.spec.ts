@@ -21,11 +21,11 @@ describe('Angular Application Schematic', () => {
 
   it('should create all files of an application', () => {
     let workspaceTree: UnitTestTree;
-    workspaceTree = schematicRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOpts);
+    // workspaceTree = schematicRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOpts);
 
-    const options = {};
+    // const options = {};
 
-    const tree = schematicRunner.runSchematic('ng-app', options);
+    // const tree = schematicRunner.runSchematic('ng-app', options);
   });
   it('should not do something', () => {});
 });

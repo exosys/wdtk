@@ -55,6 +55,7 @@ export default function(options: Options): Rule {
 }
 
 function updateProject(opts: NormalizedOptions): Rule {
+  // const relativePathToWorkspaceRoot = projectRoot.split('/').map(x => '..').join('/');
   return chain([
     (tree: Tree, context: SchematicContext) => {
       const workspace = getWorkspace(tree);
