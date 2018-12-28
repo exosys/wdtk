@@ -13,6 +13,11 @@
       },
       "x-prompt": "What name would you like to use for the library?"
     },
+    "directory": {
+      "type": "string",
+      "description": "A directory where the app is placed",
+      "x-prompt": "In which directory should the library be generated?"
+    },
     "publishable": {
       "type": "boolean",
       "default": false,
@@ -82,6 +87,11 @@
       "default": true,
       "description": "Include an NgModule in the library.",
       "x-prompt": "Would you like to generate an NgModule within the library?"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Add tags to the library (used for linting)",
+      "x-prompt": "Which tags would you like to add to the library? (used for linting)"
     },
     "unitTestRunner": {
       "type": "string",
