@@ -12,7 +12,9 @@ import {
   SchematicsException,
   MergeStrategy
 } from '@angular-devkit/schematics';
-import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+// import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+import { updateWorkspace } from '@schematics/angular/utility/config';
+import { getWorkspace } from '../../core/workspace';
 import { getProject } from '@schematics/angular/utility/project';
 import { Schema as Options } from './schema';
 import { toFileName } from './../../util/string';
