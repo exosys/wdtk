@@ -49,11 +49,26 @@ export default function(options: Options): Rule {
     return chain([
       externalSchematic('@schematics/angular', 'library', opts),
       move(libProjectRoot, opts.libProjectRoot),
-      updateProject(opts)
+      updateProject(opts),
+      updateRootTsConfig(opts)
     ]);
   };
 }
-
+function updateRootTsConfig(opts: NormalizedOptions): Rule {
+  return (tree: Tree, context: SchematicContext) => {
+    return updateJsonFile('/tsconfig.json', (json: any) => {
+      const compilerOptions = json.compilerOptions;
+      if (compilerOptions.paths) {
+        if (compilerOptions.paths[opts.name]) {
+          delete compilerOptions.paths[opts.name];
+        }
+      } else {
+        compilerOptions.paths = {};
+      }
+      compilerOptions.paths[opts.name] = [`${opts.libProjectRoot}/src/index.ts`];
+    });
+  };
+}
 function updateProject(opts: NormalizedOptions): Rule {
   // const relativePathToWorkspaceRoot = projectRoot.split('/').map(x => '..').join('/');
   return chain([
@@ -83,6 +98,9 @@ function updateProject(opts: NormalizedOptions): Rule {
           ];
         }
       }
+      //FIXME: replace the scope qualified project name with the unqualified name if the scope matches
+      //the default scope (workspace name)
+
       workspace.projects[opts.name] = project;
       return updateWorkspace(workspace);
     },
@@ -117,7 +135,7 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
 
   const name = toFileName(options.name);
 
-  //   const libProjectName = libDir.replace(new RegExp('/', 'g'), '-');
+  //FIXME replace hardcoded lib with the value read from root package.json
   const libProjectRoot = `${newProjectRoot}/lib/${libDir}`;
 
   return {
