@@ -29,7 +29,7 @@ describe('ng-library schematic', () => {
     const files = tree.files;
     expect(files).toContain(`/${newPackageRoot}/${libPackageRoot}/${defaultLibraryOptions.name}/package.json`);
   });
-  it('should create a library scoped within the workspace scope', () => {
+  it('should create a library scoped by default to the workspace name', () => {
     const tree = schematicRunner.runSchematic('ng-lib', defaultLibraryOptions, workspaceTree);
 
     const rootPkg = JSON.parse(workspaceTree.readContent('/package.json'));
