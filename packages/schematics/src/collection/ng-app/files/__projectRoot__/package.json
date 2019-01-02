@@ -1,14 +1,14 @@
 {
-  "name": "@<%= scope %>/<%= utils.dasherize(name) %>",
+  "name": "<%= packageName %>",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "start": "ng serve <%= name %>",
+    "build": "ng build <%= name %>",
+    "test": "ng test <%= name %>",
+    "lint": "ng lint <%= name %>",
+    "e2e": "ng e2e <%= e2eName %>"
   },
   "private": false,
   "dependencies": {

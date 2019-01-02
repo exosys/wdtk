@@ -8,7 +8,7 @@ import { join, normalize, strings } from '@angular-devkit/core';
 import { updateJsonInTree } from '../../util/json';
 
 import { ProjectType, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
-import { updateJsonFile } from '../../rules/updateJsonFile';
+import { updateJsonFile } from '../../rules/update-json-file';
 
 interface NormalizedOptions extends Options {
   name: string;
