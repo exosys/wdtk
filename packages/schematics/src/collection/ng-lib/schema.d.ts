@@ -1,6 +1,7 @@
 export interface Schema {
   name: string;
   skipFormat?: boolean;
+  skipInstall?: boolean;
   simpleModuleName?: boolean;
   directory?: string;
   sourceDir?: string;

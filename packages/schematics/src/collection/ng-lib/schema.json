@@ -44,6 +44,11 @@
       "default": false,
       "description": "Do not update tsconfig.json for development experience."
     },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do not install dependencies after project generation."
+    },
     "parentModule": {
       "type": "string",
       "description": "Update the router configuration of the parent module using loadChildren or children, depending on what `lazy` is set to.",
