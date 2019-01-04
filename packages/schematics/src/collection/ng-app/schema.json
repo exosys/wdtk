@@ -79,6 +79,11 @@
       "default": false,
       "description": "Do not add dependencies to package.json."
     },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Do not install dependencies after project generation."
+    },
     "unitTestRunner": {
       "type": "string",
       "enum": ["karma", "jest", "none"],
