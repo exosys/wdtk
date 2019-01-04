@@ -1,0 +1,25 @@
+{
+  "name": "<%= name %>",
+  "version": "0.0.1",
+  "main": "./dist/bundles/<%= dasherize(name) %>.umd.js",
+  "module": "./dist/fesm5/<%= dasherize(name) %>.js",
+  "es2015": "./dist/fesm2015/<%= dasherize(name) %>.js",
+  "esm5": "./dist/esm5/<%= dasherize(name) %>.js",
+  "esm2015": "./dist/esm2015/<%= dasherize(name) %>.js",
+  "fesm5": "./dist/fesm5/<%= dasherize(name) %>.js",
+  "fesm2015": "./dist/fesm2015/<%= dasherize(name) %>.js",
+  "typings": "./dist/<%= dasherize(name) %>.d.ts",
+  "metadata": "./dist/<%= dasherize(name) %>.metadata.json",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "build": "ng build <%= name %>",
+    "test": "ng test <%= name %>",
+    "lint": "ng lint <%= name %>"
+  },
+  "private": false,
+  "peerDependencies": {
+    "@angular/common": "^<%= versions.Angular %>",
+    "@angular/core": "^<%= versions.Angular %>"
+  }
+}

@@ -13,11 +13,6 @@
       },
       "x-prompt": "What name would you like to use for the library?"
     },
-    "publishable": {
-      "type": "boolean",
-      "default": false,
-      "description": "Generate a simple TS library when set to true."
-    },
     "prefix": {
       "type": "string",
       "format": "html-selector",
@@ -33,16 +28,6 @@
       "description": "Keep the module name simple (when using --directory)",
       "type": "boolean",
       "default": false
-    },
-    "skipPackageJson": {
-      "type": "boolean",
-      "default": false,
-      "description": "Do not add dependencies to package.json."
-    },
-    "skipTsConfig": {
-      "type": "boolean",
-      "default": false,
-      "description": "Do not update tsconfig.json for development experience."
     },
     "skipInstall": {
       "type": "boolean",

@@ -31,7 +31,6 @@ export default function(options: Options): Rule {
 
     const ngWorkspace = ng.getWorkspaceConfig(tree);
 
-    opts.skipInstall = true;
     const projectRoot = opts.projectRoot;
     const ngE2eProjectRoot = `${projectRoot}/${opts.name}-e2e`;
     const wxE2eProjectRoot = `${projectRoot}/e2e`;
@@ -86,8 +85,8 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
   if (/^@.*\/.*/.test(projectName)) {
     // if scope is present in the provided name, extract the scope from the name
     // to prevent the underlying schematics from failing
-    let [scope, name] = projectName.split('/');
-    scope = scope.replace('@', '');
+    let [scopeName, name] = projectName.split('/');
+    scope = scopeName.replace('@', '');
     projectName = name;
   }
   projectName = dasherize(projectName);
