@@ -1,3 +1,3 @@
 # wdtk
 
-see lerna tools on npm
+see lerna tools on npmsom
