@@ -49,7 +49,7 @@ export default function(options: Options): Rule {
     ng.versions.Angular = ng.versions.Angular.replace('~', '').replace('^', '');
     const versions = { ...ng.versions };
     return chain([
-      schematic('ng', { packagesRoot: opts.workspaceRoot, skipInstall: opts.skipInstall }),
+      schematic('ng', { packagesRoot: opts.newProjectRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'library', opts),
       move(opts.origProjectRoot, opts.destProjectRoot),
       updateWorkspaceNgConf(opts),
