@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "@wdtk/schematics/ng-jest",
+    "title": "Add Jest configuration to an Angular project.",
+    "type": "object",
+    "properties": {
+      "project": {
+        "type": "string",
+        "description": "The name of the project.",
+        "$default": {
+          "$source": "projectName"
+        }
+      },
+      "skipSetupFile": {
+        "type": "boolean",
+        "description": "Skips the setup file required for angular",
+        "default": false
+      },
+      "skipInstall": {
+        "type": "boolean",
+        "description": "Skips installing jest dependencies",
+        "default": false
+      }
+    },
+    "required": []
+  }

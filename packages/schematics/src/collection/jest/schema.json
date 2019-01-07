@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "@wdtk/schematics/jest",
+    "title": "Create Jest Configuration for the workspace",
+    "type": "object",
+    "properties": {
+      "skipInstall": {
+        "type": "boolean",
+        "description": "Do not install dependencies after adding the jest configuration.",
+        "default": false
+      }
+    },
+    "required": []
+  }

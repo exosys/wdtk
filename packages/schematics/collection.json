@@ -18,6 +18,18 @@
       "factory": "./lib/collection/ng-lib",
       "schema": "./lib/collection/ng-lib/schema.json"
     },
+    "ng-jest": {
+      "factory": "./lib/collection/ng-jest",
+      "schema": "./lib/collection/ng-jest/schema.json",
+      "description": "Add Jest configuration to an Angular project.",
+      "hidden": true
+    },
+    "jest": {
+      "factory": "./lib/collection/jest",
+      "schema": "./lib/collection/jest/schema.json",
+      "description": "Add Jest configuration to the workspace",
+      "hidden": true
+    },
     "library": {
       "aliases": ["lib"],
       "extends": "@schematics/angular:library"
