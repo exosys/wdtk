@@ -1,0 +1,37 @@
+{
+  "name": "@wdtk/builders",
+  "version": "0.0.1",
+  "description": "Schematics and builders for @wdtk/angular apps.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exosys/wdtk.git"
+  },
+  "builders": "./collection.json",
+  "scripts": {
+    "clean": "rimraf lib *.tgz .cache",
+    "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
+    "watch": "yarn run-p ~~watch:*",
+    "test": "yarn build && jest --maxWorkers=4",
+    "prepublishOnly": "yarn run build",
+    "~~compile": "tsc",
+    "~~sync-resources": "cpx \"src/**/+(__*__*|*.{js,json,md})\" ./lib",
+    "~~watch:compile": "tsc -w --preserveWatchOutput",
+    "~~watch:sync-resources": "yarn ~~sync-resources --watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@angular-devkit/architect": "~0.11.4",
+    "rxjs": "6.3.3",
+    "ts-loader": "5.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "cpx": "1.5.0",
+    "jest": "^23.6.0",
+    "npm-run-all": "4.1.5",
+    "ts-jest": "^23.10.5"
+  }
+}
