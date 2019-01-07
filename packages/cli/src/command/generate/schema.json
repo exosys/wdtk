@@ -5,7 +5,7 @@
   "$longDescription": "",
 
   "$aliases": ["g"],
-  "$scope": "in",
+  "$scope": "all",
   "$type": "schematics",
   "$impl": "./index#GenerateCommand",
 
