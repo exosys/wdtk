@@ -39,10 +39,21 @@ export default function(options: Options): Rule {
     return chain([
       schematic('ng', { packagesRoot: opts.newProjectRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'app', opts),
+      updateWorkspaceNgConf(opts),
       move(ngE2eProjectRoot, wxE2eProjectRoot),
       updateE2eProjectNgConfig(opts),
       mergeWith(apply(url('./files'), [template({ ...opts, versions })]), MergeStrategy.Overwrite)
     ]);
+  };
+}
+
+function updateWorkspaceNgConf(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {
+    const workspaceConf = ng.getWorkspaceConfig(tree);
+    if (workspaceConf.defaultProject === undefined) {
+      workspaceConf.defaultProject = opts.name;
+      return ng.updateWorkspaceConfig(workspaceConf);
+    }
   };
 }
 

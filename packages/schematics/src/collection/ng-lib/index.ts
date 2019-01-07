@@ -6,6 +6,7 @@ import { join, normalize, Path } from '@angular-devkit/core';
 import * as ng from './../../angular';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
+import { updateWorkspace } from '@schematics/angular/utility/config';
 
 interface NormalizedOptions extends Options {
   workspaceRoot: string;
@@ -51,7 +52,9 @@ export default function(options: Options): Rule {
       schematic('ng', { packagesRoot: opts.workspaceRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'library', opts),
       move(opts.origProjectRoot, opts.destProjectRoot),
-      updateProjectNgConfig(opts),
+      updateWorkspaceNgConf(opts),
+      updateProjectNgConf(opts),
+
       updateJsonFile(`${opts.projectRoot}/tsconfig.lib.json`, (json: any) => {
         json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
         json.exclude.push('**/*-spec.ts');
@@ -95,7 +98,18 @@ export default function(options: Options): Rule {
   };
 }
 
-function updateProjectNgConfig(opts: NormalizedOptions): Rule {
+function updateWorkspaceNgConf(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {
+    const workspaceConf = ng.getWorkspaceConfig(tree);
+    if (workspaceConf.defaultProject) {
+      if (workspaceConf.defaultProject === opts.name) {
+        delete workspaceConf.defaultProject;
+        return ng.updateWorkspaceConfig(workspaceConf);
+      }
+    }
+  };
+}
+function updateProjectNgConf(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     const projectRoot: Path = normalize(opts.projectRoot);
     const projectName: string = `${opts.name}`;

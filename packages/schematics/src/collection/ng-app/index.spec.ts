@@ -75,4 +75,14 @@ describe('Angular Application Schematic', () => {
   });
 
   it('should fail with a schematic exception when app name contains a scope different than the workspace name', () => {});
+
+  it('should set angular defaultProject configuration value if called after a ng-lib was generated', () => {
+    let tree: UnitTestTree = schematicRunner.runSchematic('ng-lib', { name: '@notbar/foo' }, workspaceTree);
+    let ngWorkspaceConfig = ng.getWorkspaceConfig(tree);
+    expect(ngWorkspaceConfig.defaultProject).toBeUndefined();
+
+    tree = schematicRunner.runSchematic('ng-app', { name: 'foo' }, tree);
+    ngWorkspaceConfig = ng.getWorkspaceConfig(tree);
+    expect(ngWorkspaceConfig.defaultProject).toEqual('foo');
+  });
 });
