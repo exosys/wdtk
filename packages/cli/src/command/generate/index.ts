@@ -14,6 +14,7 @@ import { parseJsonSchemaToSubCommandDescription } from '../../core/command/schem
 import { Schema as GenerateCommandSchema } from './schema';
 
 export class GenerateCommand extends SchematicCommand<GenerateCommandSchema> {
+  public readonly allowMissingWorkspace = true;
   async initialize(options: GenerateCommandSchema & Arguments) {
     await super.initialize(options);
     // some comment

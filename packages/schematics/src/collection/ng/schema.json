@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "@wdtk/schematics/jest",
+  "title": "Create Angular configuration for the workspace.",
+  "type": "object",
+  "properties": {
+    "packagesRoot": {
+      "type": "string",
+      "description": "The directory used to host all projects in the workspace.",
+
+      "default": "proj"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Do not install dependencies after adding the jest configuration.",
+      "default": false
+    }
+  },
+  "required": []
+}

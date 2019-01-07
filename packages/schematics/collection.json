@@ -6,6 +6,13 @@
       "description": "Create an wx workspace.",
       "hidden": true
     },
+    "ng-workspace": {
+      "aliases": ["ng"],
+      "factory": "./lib/collection/ng",
+      "schema": "./lib/collection/ng/schema.json",
+      "description": "Add Angular configuration to the workspace.",
+      "hidden": true
+    },
     "ng-application": {
       "description": "Generates an angular application.",
       "aliases": ["ng-app"],

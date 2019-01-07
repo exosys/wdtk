@@ -10,7 +10,8 @@ import {
   template,
   url,
   SchematicsException,
-  MergeStrategy
+  MergeStrategy,
+  schematic
 } from '@angular-devkit/schematics';
 
 import { Schema as Options } from './schema';
@@ -20,6 +21,7 @@ import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import * as ng from './../../angular';
 
 interface NormalizedOptions extends Options {
+  newProjectRoot: string;
   projectRoot: string; // make project root mandatory
   packageName: string;
   e2eName: string;
@@ -29,14 +31,13 @@ export default function(options: Options): Rule {
   return (tree: Tree) => {
     const opts: NormalizedOptions = normalizeOptions(tree, options);
 
-    const ngWorkspace = ng.getWorkspaceConfig(tree);
-
     const projectRoot = opts.projectRoot;
     const ngE2eProjectRoot = `${projectRoot}/${opts.name}-e2e`;
     const wxE2eProjectRoot = `${projectRoot}/e2e`;
 
     const versions = { ...ng.versions };
     return chain([
+      schematic('ng', { packagesRoot: opts.newProjectRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'app', opts),
       move(ngE2eProjectRoot, wxE2eProjectRoot),
       updateE2eProjectNgConfig(opts),
@@ -100,7 +101,9 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
 
   return {
     ...options,
+
     name: projectName,
+    newProjectRoot: newProjectRoot,
     e2eName: e2eProjectName,
     projectRoot: projectRoot,
     packageName: packageName,

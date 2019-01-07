@@ -104,4 +104,10 @@ describe('ng-library schematic', () => {
     const appPkg = JSON.parse(tree.readContent('/pkg/lib/foo/package.json'));
     expect(appPkg.name).toEqual('@notbar/foo');
   });
+
+  it('should not set angular defaultProject configuration value', () => {
+    const tree: UnitTestTree = schematicRunner.runSchematic('ng-lib', { name: '@notbar/foo' }, workspaceTree);
+    const ngWorkspaceConfig = ng.getWorkspaceConfig(tree);
+    expect(ngWorkspaceConfig.defaultProject).toBeUndefined();
+  });
 });

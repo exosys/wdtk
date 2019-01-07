@@ -4,6 +4,7 @@
   "license": "MIT",
   "wx": {
     "newPackageRoot": "<%= utils.dasherize(newPackageRoot) %>",
+    "newPackagesRoot":"<%= utils.dasherize(newPackageRoot) %>",
     "appPackageRoot": "<%= utils.dasherize(appPackageRoot) %>",
     "libPackageRoot": "<%= utils.dasherize(libPackageRoot) %>"
   },

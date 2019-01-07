@@ -17,7 +17,7 @@ export default function(options: Options): Rule {
   return (tree: Tree) => {
     const opts: NormalizedOptions = normalizeOptions(options, tree);
     return chain([
-      schematic('jest',{skipInstall:opts.skipInstall}),
+      schematic('jest', { skipInstall: opts.skipInstall }),
       mergeWith(
         apply(url('./files'), [
           template({
@@ -44,6 +44,7 @@ export default function(options: Options): Rule {
 function removeKarmaConfigFile(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     tree.delete(`${opts.projectRoot}/karma.conf.js`);
+    return tree;
   };
 }
 

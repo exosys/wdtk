@@ -1,4 +1,4 @@
-import { Rule, Tree, SchematicContext, MergeStrategy, externalSchematic, SchematicsException, noop } from '@angular-devkit/schematics';
+import { Rule, Tree, SchematicContext, MergeStrategy, externalSchematic, SchematicsException, schematic } from '@angular-devkit/schematics';
 import { mergeWith, apply, template, url, chain, move } from '@angular-devkit/schematics';
 import { Schema as Options } from './schema';
 import { join, normalize, Path } from '@angular-devkit/core';
@@ -8,6 +8,7 @@ import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
 
 interface NormalizedOptions extends Options {
+  workspaceRoot: string;
   name: string;
   projectRoot: string;
   origProjectRoot: string;
@@ -47,6 +48,7 @@ export default function(options: Options): Rule {
     ng.versions.Angular = ng.versions.Angular.replace('~', '').replace('^', '');
     const versions = { ...ng.versions };
     return chain([
+      schematic('ng', { packagesRoot: opts.workspaceRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'library', opts),
       move(opts.origProjectRoot, opts.destProjectRoot),
       updateProjectNgConfig(opts),
@@ -88,6 +90,7 @@ export default function(options: Options): Rule {
         compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/src/*`];
       }),
       mergeWith(apply(url('./files'), [template({ ...opts, versions, dasherize: dasherize, index: 'index.ts' })]), MergeStrategy.Overwrite)
+      // options.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
     ]);
   };
 }
@@ -129,11 +132,13 @@ function updateProjectNgConfig(opts: NormalizedOptions): Rule {
 }
 
 function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
-  const ngWorkspaceConf = ng.getWorkspaceConfig(tree);
+  // const ngWorkspaceConf = ng.getWorkspaceConfig(tree);
 
+  // FIXME : since generate can work outside of workspace verify we have a package.json
   const workspaceConf = JSON.parse(tree.read('/package.json')!.toString());
   const workspaceName = workspaceConf.name;
-  const workspaceRoot = ngWorkspaceConf.newProjectRoot;
+  // FIXME : check if wx member exists
+  const workspaceRoot = workspaceConf.wx.newPackagesRoot;
 
   const projectPath: string = options.directory ? options.directory : DEFAULT_LIB_DIR;
   let projectName: string = options.name;
@@ -161,6 +166,7 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
   const prefix = options.prefix ? options.prefix : projectScope;
   return {
     ...options,
+    workspaceRoot: workspaceRoot,
     name: fullProjectName,
     projectRoot: projectRoot,
     origProjectRoot: origProjectRoot,

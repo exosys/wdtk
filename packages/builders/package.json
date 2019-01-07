@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/exosys/wdtk.git"
   },
-  "builders": "./collection.json",
+  "builders": "./builders.json",
   "scripts": {
     "clean": "rimraf lib *.tgz .cache",
     "build": "yarn clean && yarn ~~compile && yarn ~~sync-resources",
