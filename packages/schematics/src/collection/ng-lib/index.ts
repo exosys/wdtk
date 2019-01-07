@@ -9,7 +9,7 @@ import { updateJsonFile } from '../../rules/update-json-file';
 import { updateWorkspace } from '@schematics/angular/utility/config';
 
 interface NormalizedOptions extends Options {
-  workspaceRoot: string;
+  newProjectRoot: string;
   name: string;
   projectRoot: string;
   origProjectRoot: string;
@@ -180,7 +180,7 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
   const prefix = options.prefix ? options.prefix : projectScope;
   return {
     ...options,
-    workspaceRoot: workspaceRoot,
+    newProjectRoot: workspaceRoot,
     name: fullProjectName,
     projectRoot: projectRoot,
     origProjectRoot: origProjectRoot,
