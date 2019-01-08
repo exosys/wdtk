@@ -12,7 +12,7 @@ function getJsonFileContent(projectName: string, relativePath: string, tree: Uni
   return json;
 }
 
-describe('ng-library schematic', () => {
+describe('Angular library schematic :', () => {
   const schematicRunner = new SchematicTestRunner('@wdtk/schematics', require.resolve('../../../collection.json'));
 
   const defaultLibraryOptions: LibraryOptions = {
@@ -109,5 +109,21 @@ describe('ng-library schematic', () => {
     const tree: UnitTestTree = schematicRunner.runSchematic('ng-lib', { name: '@notbar/foo' }, workspaceTree);
     const ngWorkspaceConfig = ng.getWorkspaceConfig(tree);
     expect(ngWorkspaceConfig.defaultProject).toBeUndefined();
+  });
+
+  it('should not generate test files or configuration when called with --unitTestRunner=none ', () => {
+    const tree: UnitTestTree = schematicRunner.runSchematic('ng-lib', { name: 'foo', unitTestRunner: 'none' }, workspaceTree);
+
+    expect(tree.files).not.toContain('/pkg/lib/foo/jest.conf.js');
+    expect(tree.files).not.toContain('/pkg/lib/foo/karma.conf.js');
+    expect(tree.files).not.toContain('/pkg/lib/foo/tsconfig.spec.ts');
+    expect(tree.files).not.toContain('/pkg/lib/foo/src/test.ts');
+
+    const project = ng.getProject('@bar/foo', tree);
+
+    if (project.architect) {
+      expect(project.architect.test).toBeUndefined();
+      expect(project.architect.lint!.options!.tsConfig).not.toContain('pkg/lib/foo/tsconfig.spec.json');
+    }
   });
 });

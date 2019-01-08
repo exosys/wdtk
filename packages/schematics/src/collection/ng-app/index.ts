@@ -1,24 +1,12 @@
 import { join, normalize, Path } from '@angular-devkit/core';
-import {
-  Rule,
-  Tree,
-  chain,
-  externalSchematic,
-  move,
-  mergeWith,
-  apply,
-  template,
-  url,
-  SchematicsException,
-  MergeStrategy,
-  schematic
-} from '@angular-devkit/schematics';
-
+import { Rule, Tree, SchematicsException, MergeStrategy } from '@angular-devkit/schematics';
+import { externalSchematic, schematic, mergeWith, apply, template, url, chain, move, noop } from '@angular-devkit/schematics';
 import { Schema as Options } from './schema';
 
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 
 import * as ng from './../../angular';
+import { removeKarma } from '../../rules/remove-karma';
 
 interface NormalizedOptions extends Options {
   newProjectRoot: string;
@@ -42,7 +30,8 @@ export default function(options: Options): Rule {
       updateWorkspaceNgConf(opts),
       move(ngE2eProjectRoot, wxE2eProjectRoot),
       updateE2eProjectNgConfig(opts),
-      mergeWith(apply(url('./files'), [template({ ...opts, versions })]), MergeStrategy.Overwrite)
+      mergeWith(apply(url('./files'), [template({ ...opts, versions })]), MergeStrategy.Overwrite),
+      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop()
     ]);
   };
 }

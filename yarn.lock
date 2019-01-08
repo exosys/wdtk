@@ -714,7 +714,7 @@
   dependencies:
     "@types/node" "*"
 
-"@wdtk/schematics@0.0.3":
+"@wdtk/schematics@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@wdtk/schematics/-/schematics-0.0.3.tgz#cdd595ba79f1e8e8bfac50aee77fd420cb2ad199"
   dependencies:

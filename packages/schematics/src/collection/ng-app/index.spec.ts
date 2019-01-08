@@ -85,4 +85,20 @@ describe('Angular Application Schematic', () => {
     ngWorkspaceConfig = ng.getWorkspaceConfig(tree);
     expect(ngWorkspaceConfig.defaultProject).toEqual('foo');
   });
+
+  it('should not generate test files or configuration when called with --unitTestRunner=none ', () => {
+    const tree: UnitTestTree = schematicRunner.runSchematic('ng-app', { name: 'foo', unitTestRunner: 'none' }, workspaceTree);
+
+    expect(tree.files).not.toContain('/pkg/app/foo/jest.conf.js');
+    expect(tree.files).not.toContain('/pkg/app/foo/karma.conf.js');
+    expect(tree.files).not.toContain('/pkg/app/foo/tsconfig.spec.ts');
+    expect(tree.files).not.toContain('/pkg/app/foo/src/test.ts');
+
+    const project = ng.getProject('foo', tree);
+
+    if (project.architect) {
+      expect(project.architect.test).toBeUndefined();
+      expect(project.architect.lint!.options!.tsConfig).not.toContain('pkg/app/foo/tsconfig.spec.json');
+    }
+  });
 });

@@ -1,4 +1,13 @@
-import { Rule, Tree, SchematicContext, MergeStrategy, externalSchematic, SchematicsException, schematic } from '@angular-devkit/schematics';
+import {
+  Rule,
+  Tree,
+  SchematicContext,
+  MergeStrategy,
+  externalSchematic,
+  SchematicsException,
+  schematic,
+  noop
+} from '@angular-devkit/schematics';
 import { mergeWith, apply, template, url, chain, move } from '@angular-devkit/schematics';
 import { Schema as Options } from './schema';
 import { join, normalize, Path } from '@angular-devkit/core';
@@ -7,6 +16,7 @@ import * as ng from './../../angular';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
 import { updateWorkspace } from '@schematics/angular/utility/config';
+import { removeKarma } from '../../rules/remove-karma';
 
 interface NormalizedOptions extends Options {
   newProjectRoot: string;
@@ -54,6 +64,7 @@ export default function(options: Options): Rule {
       move(opts.origProjectRoot, opts.destProjectRoot),
       updateWorkspaceNgConf(opts),
       updateProjectNgConf(opts),
+      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop(),
 
       updateJsonFile(`${opts.projectRoot}/tsconfig.lib.json`, (json: any) => {
         json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
@@ -128,16 +139,19 @@ function updateProjectNgConf(opts: NormalizedOptions): Rule {
         architect.build.options.tsConfig = join(projectRoot, 'tsconfig.lib.json');
         architect.build.options.project = join(projectRoot, 'ng-package.json');
       }
-      if (architect.test) {
-        architect.test.options.main = join(projectRoot, 'src', 'test.ts');
-        architect.test.options.tsConfig = join(projectRoot, 'tsconfig.spec.json');
-        architect.test.options.karmaConfig = join(projectRoot, 'karma.conf.js');
-      }
-      if (architect.lint) {
+      // if (architect.test) {
+      //   architect.test.options.main = join(projectRoot, 'src', 'test.ts');
+      //   architect.test.options.tsConfig = join(projectRoot, 'tsconfig.spec.json');
+      //   architect.test.options.karmaConfig = join(projectRoot, 'karma.conf.js');
+      // }
+      if (
+        architect.lint
+      ) {
         //prettier-ignore
-        architect.lint.options.tsConfig = [
-          join(projectRoot, 'tsconfig.lib.json'), 
-          join(projectRoot, 'tsconfig.spec.json')];
+        // architect.lint.options.tsConfig.push()
+        // architect.lint.options.tsConfig = [
+        //   join(projectRoot, 'tsconfig.lib.json'), 
+          // join(projectRoot, 'tsconfig.spec.json')];
       }
     }
 
