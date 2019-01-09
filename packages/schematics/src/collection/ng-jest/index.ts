@@ -63,7 +63,7 @@ function updateProjectNgConf(opts: NormalizedOptions): Rule {
         delete architect.test;
       }
       architect.test = {
-        builder: '@angular-builder/jest:run',
+        builder: '@angular-builders/jest:run',
         options: {
           // main: join(projectRoot, 'src', 'test.ts'),
           // tsConfig: join(projectRoot, 'tsconfig.spec.json'),

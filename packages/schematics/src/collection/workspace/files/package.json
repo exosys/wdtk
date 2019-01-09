@@ -23,7 +23,10 @@
       "**/electron-updater/**"
     ]
   },
-  "scripts": {},
+  "scripts": {
+    "build": "lerna run --concurrency 2 --stream build",
+    "test": "lerna run --concurrency 2 --stream test"
+  },
   "private": true,
   "dependencies": {},
   "devDependencies": {

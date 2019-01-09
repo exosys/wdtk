@@ -4,6 +4,7 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { Schema as Options } from './schema';
 import { updateJsonFile } from '../../rules/update-json-file';
+import * as ng from '../../angular';
 
 export interface NormalizedOptions extends Options {}
 
@@ -30,8 +31,9 @@ export default function(options: Options): Rule {
 function addDependencies(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     return updateJsonFile('/package.json', (json: any) => {
-      json.dependencies = {
-        ...json.dependencies
+      json.devDependencies = {
+        ...json.devDependencies,
+        '@angular/compiler': `${ng.versions.Angular}`
       };
     });
   };
