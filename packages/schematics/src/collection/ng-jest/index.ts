@@ -5,7 +5,7 @@ import { chain, mergeWith, apply, url, template } from '@angular-devkit/schemati
 import * as ng from './../../angular';
 import { Schema as Options } from './schema';
 import { updateJsonFile } from '../../rules/update-json-file';
-import { type } from 'os';
+import { versions } from '../../versions';
 
 export interface NormalizedOptions extends Options {
   preset: string;
@@ -22,33 +22,32 @@ export default function(options: Options): Rule {
         apply(url('./files'), [
           template({
             ...opts,
-            conf: 'jest.config.js'
+            conf: 'jest.config.js',
+            test_ts: 'test.ts'
           })
         ])
       ),
-      removeKarmaConfigFile(opts),
-      updateJsonFile(`${opts.projectRoot}/tsconfig.spec.json`, (json: any) => {
-        let types: string[] = json.compilerOptions.types;
-        types.push('jest');
-
-        json.compilerOptions.types = types.filter(type => {
-          return type !== 'jasmine';
-        });
-      }),
       //import 'jest-preset-angular'; in test.js
-      updateProjectNgConfig(opts)
+      addDependencies(opts),
+      updateProjectNgConf(opts)
     ]);
   };
 }
 
-function removeKarmaConfigFile(opts: NormalizedOptions): Rule {
+function addDependencies(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
-    tree.delete(`${opts.projectRoot}/karma.conf.js`);
-    return tree;
+    return updateJsonFile(`${opts.projectRoot}/package.json`, (json: any) => {
+      const t = json;
+      json.devDependencies = {
+        ...json.devDependencies,
+        '@angular-builders/jest': `^${versions.angularBuildersJest}`
+      };
+      const x = json;
+    });
   };
 }
 
-function updateProjectNgConfig(opts: NormalizedOptions): Rule {
+function updateProjectNgConf(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     const projectRoot: Path = normalize(opts.projectRoot);
     const projectName: string = `${opts.project}`;
@@ -64,13 +63,14 @@ function updateProjectNgConfig(opts: NormalizedOptions): Rule {
         delete architect.test;
       }
       architect.test = {
-        builder: '@wdtk/builders:jest',
+        builder: '@angular-builder/jest:run',
         options: {
-          main: join(projectRoot, 'src', 'test.ts'),
-          tsConfig: join(projectRoot, 'tsconfig.spec.json'),
-          jestConfig: join(projectRoot, 'jest.config.js')
+          // main: join(projectRoot, 'src', 'test.ts'),
+          // tsConfig: join(projectRoot, 'tsconfig.spec.json'),
+          // jestConfig: join(projectRoot, 'jest.config.js')
         }
       };
+      architect.lint.options.tsConfig.push(join(projectRoot, 'tsconfig.spec.json'));
     }
     return ng.updateProject(projectName, project);
   };

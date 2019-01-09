@@ -34,3 +34,11 @@ export function removeKarma<T>(projectName: string): Rule {
     return ng.updateProject(projectName, project);
   };
 }
+
+function removeDependencies(): Rule {
+  return (tree: Tree) => {};
+}
+
+function updateProjectNgConf(): Rule {
+  return (tree: Tree) => {};
+}

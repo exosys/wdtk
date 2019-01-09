@@ -2,6 +2,15 @@ import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/te
 import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
 import { Schema as ApplicationOptions } from '@schematics/angular/application/schema';
 import * as ng from './../../angular';
+
+function getJsonFileContent(projectName: string, relativePath: string, tree: UnitTestTree): any {
+  const rootPkg = JSON.parse(tree.readContent('/package.json'));
+  const newPackageRoot = rootPkg.wx.newPackageRoot;
+  const libPackageRoot = rootPkg.wx.libPackageRoot;
+  const path = `/${newPackageRoot}/${libPackageRoot}/${projectName}/${relativePath}`;
+  const json = JSON.parse(tree.readContent(path));
+  return json;
+}
 describe('Angular Application Schematic', () => {
   const workspaceOpts: WorkspaceOptions = {
     name: 'bar',
@@ -26,6 +35,40 @@ describe('Angular Application Schematic', () => {
     const tree: UnitTestTree = schematicRunner.runSchematic('ng-app', { name: 'foo' }, workspaceTree);
     const files = tree.files;
     expect(files).toContain(`/pkg/app/foo/src/main.ts`);
+    expect(files).toContain('/pkg/app/foo/tsconfig.app.json');
+  });
+
+  it('should update the angular workspace configuration for the app', () => {
+    const tree = schematicRunner.runSchematic('ng-app', { name: 'foo' }, workspaceTree);
+    const project = ng.getProject('foo', tree);
+    expect(project.root).toEqual('pkg/app/foo');
+    expect(project.sourceRoot).toEqual('pkg/app/foo/src');
+    if (project.architect) {
+      if (project.architect.build) {
+        expect(project.architect.build.options.index).toEqual(`${project.sourceRoot}/index.html`);
+        expect(project.architect.build.options.main).toEqual(`${project.sourceRoot}/main.ts`);
+        expect(project.architect.build.options.polyfills).toEqual(`${project.sourceRoot}/polyfills.ts`);
+        expect(project.architect.build.options.tsConfig).toEqual(`${project.root}/tsconfig.app.json`);
+        expect(project.architect.build.options.assets).toContain(`${project.sourceRoot}/favicon.ico`);
+        expect(project.architect.build.options.assets).toContain(`${project.sourceRoot}/assets`);
+        expect(project.architect.build.options.styles).toContain(`${project.sourceRoot}/styles.css`);
+        expect(project.architect.build.configurations!.production.fileReplacements).toContainEqual({
+          replace: `${project.sourceRoot}/environments/environment.ts`,
+          with: `${project.sourceRoot}/environments/environment.prod.ts`
+        });
+      }
+      if (project.architect.lint) {
+        expect(project.architect.lint.options.tsConfig).toEqual(
+          expect.arrayContaining(['pkg/app/foo/tsconfig.app.json', 'pkg/app/foo/tsconfig.spec.json'])
+        );
+      }
+    }
+  });
+
+  it('should update the tslint config file for the app', () => {
+    const tree = schematicRunner.runSchematic('ng-app', { name: 'foo' }, workspaceTree);
+    let tslint = JSON.parse(tree.readContent('pkg/app/foo/tslint.json'));
+    expect(tslint.extends).toMatch('../../../tslint.json');
   });
 
   it('should by default set the prefix to the scope name ', () => {
@@ -99,6 +142,22 @@ describe('Angular Application Schematic', () => {
     if (project.architect) {
       expect(project.architect.test).toBeUndefined();
       expect(project.architect.lint!.options!.tsConfig).not.toContain('pkg/app/foo/tsconfig.spec.json');
+    }
+  });
+
+  it('should generate jest test files or configuration when called with --unitTestRunner=jest ', () => {
+    const tree: UnitTestTree = schematicRunner.runSchematic('ng-app', { name: 'foo', unitTestRunner: 'jest' }, workspaceTree);
+
+    expect(tree.files).not.toContain('/pkg/app/foo/jest.conf.js');
+
+    expect(tree.files).toContain('/pkg/app/foo/tsconfig.spec.json');
+    expect(tree.files).toContain('/pkg/app/foo/src/test.ts');
+
+    const project = ng.getProject('foo', tree);
+
+    if (project.architect) {
+      expect(project.architect.test).not.toBeUndefined();
+      expect(project.architect.lint!.options!.tsConfig).toContain('pkg/app/foo/tsconfig.spec.json');
     }
   });
 });

@@ -7,10 +7,15 @@ import { dasherize } from '@angular-devkit/core/src/utils/strings';
 
 import * as ng from './../../angular';
 import { removeKarma } from '../../rules/remove-karma';
+import { updateJsonFile } from '../../rules/update-json-file';
 
+const DEFAULT_APP_DIR = 'app';
 interface NormalizedOptions extends Options {
   newProjectRoot: string;
-  projectRoot: string; // make project root mandatory
+  ngAppProjectRoot: string;
+  wxAppProjectRoot: string;
+  ngE2eProjectRoot: string;
+  wxE2eProjectRoot: string;
   packageName: string;
   e2eName: string;
 }
@@ -19,19 +24,31 @@ export default function(options: Options): Rule {
   return (tree: Tree) => {
     const opts: NormalizedOptions = normalizeOptions(tree, options);
 
-    const projectRoot = opts.projectRoot;
-    const ngE2eProjectRoot = `${projectRoot}/${opts.name}-e2e`;
-    const wxE2eProjectRoot = `${projectRoot}/e2e`;
+    const projectRoot = opts.wxAppProjectRoot;
+    //prettier-ignore
+    const relativePathToWorkspaceRoot = projectRoot.split('/').map(x => '..').join('/');
 
     const versions = { ...ng.versions };
     return chain([
       schematic('ng', { packagesRoot: opts.newProjectRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'app', opts),
+      mergeWith(apply(url('./files'), [template({ ...opts, projectRoot: opts.wxAppProjectRoot, versions })]), MergeStrategy.Overwrite),
+
+      move(opts.ngAppProjectRoot, opts.wxAppProjectRoot),
       updateWorkspaceNgConf(opts),
-      move(ngE2eProjectRoot, wxE2eProjectRoot),
-      updateE2eProjectNgConfig(opts),
-      mergeWith(apply(url('./files'), [template({ ...opts, versions })]), MergeStrategy.Overwrite),
-      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop()
+      updateAppProjectNgConf(opts),
+      move(opts.ngE2eProjectRoot, opts.wxE2eProjectRoot),
+      updateE2eProjectNgConf(opts),
+      updateJsonFile(`${projectRoot}/tsconfig.app.json`, (json: any) => {
+        json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
+        json.exclude.push('**/*-spec.ts');
+        json.compilerOptions.outDir = `./out/tsc`;
+      }),
+      updateJsonFile(`${projectRoot}/tslint.json`, (json: any) => {
+        json.extends = `${relativePathToWorkspaceRoot}/tslint.json`;
+      }),
+      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop(),
+      opts.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
     ]);
   };
 }
@@ -45,14 +62,56 @@ function updateWorkspaceNgConf(opts: NormalizedOptions): Rule {
     }
   };
 }
-
-function updateE2eProjectNgConfig(opts: NormalizedOptions): Rule {
+function updateAppProjectNgConf(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
-    const projectRoot: Path = join(normalize(opts.projectRoot), 'e2e');
+    const projectName = opts.name;
+    const project = ng.getProject(projectName, tree);
+
+    const projectRoot = normalize(opts.wxAppProjectRoot);
+    project.root = projectRoot;
+    project.sourceRoot = join(projectRoot, 'src');
+    if (project.architect) {
+      if (project.architect.build) {
+        project.architect.build.options = {
+          ...project.architect.build.options,
+          index: join(projectRoot, 'src', 'index.html'),
+          main: join(projectRoot, 'src', 'main.ts'),
+          polyfills: join(projectRoot, 'src', 'polyfills.ts'),
+          tsConfig: join(projectRoot, 'tsconfig.app.json'),
+          //prettier-ignore
+          assets: [
+            join(projectRoot, 'src', 'favicon.ico'), 
+            join(projectRoot, 'src', 'assets')
+          ],
+          styles: [join(projectRoot, 'src', 'styles.css')]
+        };
+        if (project.architect.build.configurations) {
+          project.architect.build.configurations.production = {
+            ...project.architect.build.configurations.production,
+            fileReplacements: [
+              {
+                replace: join(projectRoot, 'src', 'environments', 'environment.ts'),
+                with: join(projectRoot, 'src', 'environments', 'environment.prod.ts')
+              }
+            ]
+          };
+        }
+        if (project.architect.lint) {
+          project.architect.lint.options.tsConfig = [];
+          project.architect.lint.options.tsConfig.push(join(projectRoot, 'tsconfig.app.json'));
+          project.architect.lint.options.tsConfig.push(join(projectRoot, 'tsconfig.spec.json'));
+        }
+      }
+    }
+    return ng.updateProject(projectName, project);
+  };
+}
+function updateE2eProjectNgConf(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {
     const projectName = `${opts.e2eName}`;
 
     const project = ng.getProject(projectName, tree);
-
+    const projectRoot = normalize(opts.wxE2eProjectRoot);
     //update the project's root path
     project.root = projectRoot;
     project.sourceRoot = join(projectRoot, 'src');
@@ -64,7 +123,6 @@ function updateE2eProjectNgConfig(opts: NormalizedOptions): Rule {
         project.architect.lint.options.tsConfig = join(projectRoot, 'tsconfig.e2e.json');
       }
     }
-
     return ng.updateProject(projectName, project);
   };
 }
@@ -76,37 +134,46 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
     throw new SchematicsException(`Invalid options, "name" is required.`);
   }
 
-  const rootPackage = JSON.parse(tree.read('/package.json')!.toString());
-  const newProjectRoot = rootPackage.wx.newPackageRoot;
-  const newAppProjectRoot = rootPackage.wx.appPackageRoot;
+  const workspaceConf = JSON.parse(tree.read('/package.json')!.toString());
+  const workspaceName = workspaceConf.name;
+  const workspaceRoot = workspaceConf.wx.newPackagesRoot;
 
+  const projectPath: string = options.directory ? dasherize(options.directory) : DEFAULT_APP_DIR;
   let projectName: string = options.name;
-  let scope = `${rootPackage.name}`;
+
+  let projectScope = `${workspaceName}`;
 
   if (/^@.*\/.*/.test(projectName)) {
     // if scope is present in the provided name, extract the scope from the name
     // to prevent the underlying schematics from failing
-    let [scopeName, name] = projectName.split('/');
-    scope = scopeName.replace('@', '');
-    projectName = name;
+    let [_scope, _name] = projectName.split('/');
+    projectScope = _scope.replace('@', '');
+    projectName = _name;
   }
   projectName = dasherize(projectName);
+  const fullProjectName = `@${projectScope}/${projectName}`;
+
+  const appProjectName = projectName;
+  const ngAppProjectRoot = `${workspaceRoot}/${projectName}`;
+  const wxAppProjectRoot = `${workspaceRoot}/${projectPath}/${projectName}`;
+
   const e2eProjectName = `${projectName}-e2e`;
-  const packageName = `@${scope}/${projectName}`;
+  const ngE2eProjectRoot = `${workspaceRoot}/${opts.name}-e2e`;
+  const wxE2eProjectRoot = `${wxAppProjectRoot}/e2e`;
 
-  const appDir = options.directory ? `${dasherize(options.directory)}/${projectName}` : `${projectName}`;
-  const projectRoot = `${newProjectRoot}/${newAppProjectRoot}/${appDir}`;
-
-  const prefix = options.prefix ? options.prefix : scope;
+  const prefix = options.prefix ? options.prefix : projectScope;
 
   return {
     ...options,
 
-    name: projectName,
-    newProjectRoot: newProjectRoot,
+    name: appProjectName,
+    newProjectRoot: workspaceRoot,
+    ngAppProjectRoot: ngAppProjectRoot,
+    wxAppProjectRoot: wxAppProjectRoot,
     e2eName: e2eProjectName,
-    projectRoot: projectRoot,
-    packageName: packageName,
+    ngE2eProjectRoot: ngE2eProjectRoot,
+    wxE2eProjectRoot: wxE2eProjectRoot,
+    packageName: fullProjectName,
     prefix: prefix
   };
 }
