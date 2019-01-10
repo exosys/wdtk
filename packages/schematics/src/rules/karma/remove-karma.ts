@@ -81,6 +81,9 @@ function removeDependencies(projectName: string): Rule {
     const projectRoot = normalize(project.root);
     return updateJsonFile(`${projectRoot}/package.json`, (json: any) => {
       let devDependencies = json.devDependencies;
+      if (!devDependencies) {
+        return;
+      }
       Object.keys(devDependencies).forEach(function(key) {
         if (key.includes('karma')) {
           delete devDependencies[key];
