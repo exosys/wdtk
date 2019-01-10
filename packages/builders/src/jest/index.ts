@@ -3,7 +3,6 @@ import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 const { runCLI } = require('jest');
 import * as path from 'path';
-import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 
 export interface JestBuilderOptions {
   jestConfig: string;
