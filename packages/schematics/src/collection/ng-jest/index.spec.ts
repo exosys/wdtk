@@ -44,7 +44,7 @@ describe('ng-jest', () => {
     const project = ng.getProject(projectName, projectTree);
     expect((<any>project).architect).toBeDefined();
     expect((<any>project).architect.test).toBeDefined();
-    expect((<any>project).architect.test.builder).toEqual('@wdtk/builders:jest');
+    expect((<any>project).architect.test.builder).toEqual('@angular-builders/jest:run');
   });
 
   it('should update the tsconfig.spec.json', () => {
