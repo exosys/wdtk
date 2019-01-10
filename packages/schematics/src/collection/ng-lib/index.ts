@@ -16,7 +16,7 @@ import * as ng from './../../angular';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
 import { updateWorkspace } from '@schematics/angular/utility/config';
-import { removeKarma } from '../../rules/karma';
+import { removeKarma, updateKarma } from '../../rules/karma';
 
 interface NormalizedOptions extends Options {
   newProjectRoot: string;
@@ -64,7 +64,6 @@ export default function(options: Options): Rule {
       move(opts.origProjectRoot, opts.destProjectRoot),
       updateWorkspaceNgConf(opts),
       updateProjectNgConf(opts),
-      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop(),
 
       updateJsonFile(`${opts.projectRoot}/tsconfig.lib.json`, (json: any) => {
         json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
@@ -103,8 +102,9 @@ export default function(options: Options): Rule {
         compilerOptions.paths[opts.name] = [`${opts.projectRoot}/src/`];
         compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/src/*`];
       }),
-      mergeWith(apply(url('./files'), [template({ ...opts, versions, dasherize: dasherize, index: 'index.ts' })]), MergeStrategy.Overwrite)
-      // options.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
+      mergeWith(apply(url('./files'), [template({ ...opts, versions, dasherize: dasherize, index: 'index.ts' })]), MergeStrategy.Overwrite),
+      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : updateKarma(opts.name),
+      options.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
     ]);
   };
 }
