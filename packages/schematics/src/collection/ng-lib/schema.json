@@ -39,6 +39,13 @@
       "description": "Update the router configuration of the parent module using loadChildren or children, depending on what `lazy` is set to.",
       "x-prompt": "Which module should import the library?"
     },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
     "style": {
       "description": "The file extension to be used for style files.",
       "type": "string",
@@ -85,5 +92,6 @@
       }
     }
   },
+
   "required": []
 }

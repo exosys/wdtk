@@ -24,6 +24,7 @@ interface NormalizedOptions extends Options {
   projectRoot: string;
   origProjectRoot: string;
   destProjectRoot: string;
+  entryType: string;
   // entryFile: string;
 }
 
@@ -62,49 +63,91 @@ export default function(options: Options): Rule {
       schematic('ng', { packagesRoot: opts.newProjectRoot, skipInstall: opts.skipInstall }),
       externalSchematic('@schematics/angular', 'library', opts),
       move(opts.origProjectRoot, opts.destProjectRoot),
+      mergeWith(apply(url('./files'), [template({ ...opts, versions, dasherize: dasherize, index: 'index.ts' })]), MergeStrategy.Overwrite),
+
       updateWorkspaceNgConf(opts),
       updateProjectNgConf(opts),
 
-      updateJsonFile(`${opts.projectRoot}/tsconfig.lib.json`, (json: any) => {
-        json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
-        json.exclude.push('**/*-spec.ts');
-        json.compilerOptions.outDir = `./out/tsc`;
-        //   json.compilerOptions.outDir = `${relativePathToWorkspaceRoot}/dist/out-tsc/${wxProjectRoot}`;
-      }),
-      updateJsonFile(`${opts.projectRoot}/tsconfig.spec.json`, (json: any) => {
-        json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
-        json.compilerOptions.outDir = `./out/tsc`;
-        //   json.compilerOptions.outDir = `${relativePathToWorkspaceRoot}/dist/out-tsc/${wxProjectRoot}`;
-      }),
-      updateJsonFile(`${opts.projectRoot}/tslint.json`, (json: any) => {
-        json.extends = `${relativePathToWorkspaceRoot}/tslint.json`;
-      }),
-      updateJsonFile(`${opts.projectRoot}/ng-package.json`, (json: any) => {
-        // correct the $schema path
-        json.$schema = `${relativePathToWorkspaceRoot}/node_modules/ng-packagr/ng-package.schema.json`;
-        // change the ng-packager `dest` dir to be contained within the project's root dir
-        // to be compatible with other package managers (lerna, yarn)
-        json.dest = './dist';
-      }),
-      updateJsonFile('/tsconfig.json', (json: any) => {
-        const compilerOptions = json.compilerOptions;
-        if (compilerOptions.paths) {
-          //remove entries created by the angular schematic
-          if (compilerOptions.paths[opts.name]) {
-            delete compilerOptions.paths[opts.name];
-          }
-          if (compilerOptions.paths[`${opts.name}/*`]) {
-            delete compilerOptions.paths[`${opts.name}/*`];
-          }
-        } else {
-          compilerOptions.paths = {};
-        }
-        compilerOptions.paths[opts.name] = [`${opts.projectRoot}/src/`];
-        compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/src/*`];
-      }),
-      mergeWith(apply(url('./files'), [template({ ...opts, versions, dasherize: dasherize, index: 'index.ts' })]), MergeStrategy.Overwrite),
+      opts.entryType === 'primary'
+        ? updateJsonFile(`${opts.projectRoot}/tsconfig.lib.json`, (json: any) => {
+            json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
+            json.exclude.push('**/*-spec.ts');
+            json.compilerOptions.outDir = `./out/tsc`;
+            //   json.compilerOptions.outDir = `${relativePathToWorkspaceRoot}/dist/out-tsc/${wxProjectRoot}`;
+          })
+        : (tree: Tree) => {
+            tree.delete(`${opts.projectRoot}/tsconfig.lib.json`);
+          },
+      opts.entryType === 'primary'
+        ? updateJsonFile(`${opts.projectRoot}/tsconfig.spec.json`, (json: any) => {
+            json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
+            json.compilerOptions.outDir = `./out/tsc`;
+            //   json.compilerOptions.outDir = `${relativePathToWorkspaceRoot}/dist/out-tsc/${wxProjectRoot}`;
+          })
+        : noop(), //let remove karma rule to deal with this file
+      opts.entryType === 'primary'
+        ? updateJsonFile(`${opts.projectRoot}/tslint.json`, (json: any) => {
+            json.extends = `${relativePathToWorkspaceRoot}/tslint.json`;
+          })
+        : (tree: Tree) => {
+            if (tree.exists(`${opts.projectRoot}/tslint.json`)) {
+              tree.delete(`${opts.projectRoot}/tslint.json`);
+            }
+          },
+      opts.entryType === 'primary'
+        ? updateJsonFile(`${opts.projectRoot}/ng-package.json`, (json: any) => {
+            // correct the $schema path
+            json.$schema = `${relativePathToWorkspaceRoot}/node_modules/ng-packagr/ng-package.schema.json`;
+            // change the ng-packager `dest` dir to be contained within the project's root dir
+            // to be compatible with other package managers (lerna, yarn)
+            json.dest = './dist';
+          })
+        : (tree: Tree) => {
+            if (tree.exists(`${opts.projectRoot}/ng-package.json`)) {
+              tree.delete(`${opts.projectRoot}/ng-package.json`);
+            }
+          },
+      opts.entryType === 'primary'
+        ? updateJsonFile('/tsconfig.json', (json: any) => {
+            const compilerOptions = json.compilerOptions;
+            if (compilerOptions.paths) {
+              //remove entries created by the angular schematic
+              if (compilerOptions.paths[opts.name]) {
+                delete compilerOptions.paths[opts.name];
+              }
+              if (compilerOptions.paths[`${opts.name}/*`]) {
+                delete compilerOptions.paths[`${opts.name}/*`];
+              }
+            } else {
+              compilerOptions.paths = {};
+            }
+            compilerOptions.paths[opts.name] = [`${opts.projectRoot}/src/`];
+            compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/src/*`];
+          })
+        : noop(),
+      opts.entryType === 'secondary'
+        ? updateJsonFile(`${opts.projectRoot}/package.json`, (json: any) => {
+            Object.keys(json).forEach(function(key) {
+              delete json[key];
+            });
+            json.ngPackage = {};
+          })
+        : noop(),
       opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : updateKarma(opts.name),
-      options.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
+      opts.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop(),
+
+      // we have to remove angular workspace configuration entry last because otherwise rules that rely on the ng project's
+      // configuration will fail
+
+      opts.entryType !== 'primary'
+        ? (tree: Tree) => {
+            const ngWorkspaceConf = ng.getWorkspaceConfig(tree);
+            if (ngWorkspaceConf.projects[opts.name]) {
+              delete ngWorkspaceConf.projects[opts.name];
+              return ng.updateWorkspaceConfig(ngWorkspaceConf);
+            }
+          }
+        : noop()
     ]);
   };
 }
@@ -160,15 +203,26 @@ function updateProjectNgConf(opts: NormalizedOptions): Rule {
 }
 
 function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
-  // const ngWorkspaceConf = ng.getWorkspaceConfig(tree);
-
   // FIXME : since generate can work outside of workspace verify we have a package.json
   const workspaceConf = JSON.parse(tree.read('/package.json')!.toString());
   const workspaceName = workspaceConf.name;
   // FIXME : check if wx member exists
   const workspaceRoot = workspaceConf.wx.newPackagesRoot;
 
-  const projectPath: string = options.directory ? options.directory : DEFAULT_LIB_DIR;
+  let projectPath: string = options.directory ? options.directory : DEFAULT_LIB_DIR;
+  let entryType: string = 'primary';
+  let unitTestRunner = options.unitTestRunner;
+  let skipInstall = options.skipInstall;
+  if (options.project) {
+    const parentProject = ng.getProject(options.project, tree);
+    if (parentProject.projectType === 'library') {
+      entryType = 'secondary';
+      projectPath = parentProject.root.replace(`${workspaceRoot}/`, '');
+      skipInstall = true;
+      unitTestRunner = 'none';
+    }
+  }
+
   let projectName: string = options.name;
 
   // if the provided project name is not scoped the project will be named
@@ -199,6 +253,9 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
     projectRoot: projectRoot,
     origProjectRoot: origProjectRoot,
     destProjectRoot: destProjectRoot,
-    prefix: prefix
+    prefix: prefix,
+    skipInstall: skipInstall,
+    unitTestRunner: unitTestRunner,
+    entryType: entryType
   };
 }
