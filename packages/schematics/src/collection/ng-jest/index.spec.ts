@@ -22,7 +22,7 @@ describe('ng-jest', () => {
 
   beforeEach(() => {
     workspaceTree = schematicRunner.runSchematic('workspace', workspaceOpts);
-    projectTree = schematicRunner.runSchematic('ng-lib', { name: 'foo' }, workspaceTree);
+    projectTree = schematicRunner.runSchematic('ng-lib', { name: 'foo', unitTestRunner: 'none' }, workspaceTree);
     projectTree = schematicRunner.runSchematic('ng-jest', { project: '@bar/foo' }, projectTree);
   });
   it('should generate jest config file', () => {

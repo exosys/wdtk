@@ -37,12 +37,10 @@ export default function(options: Options): Rule {
 function addDependencies(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     return updateJsonFile(`${opts.projectRoot}/package.json`, (json: any) => {
-      const t = json;
       json.devDependencies = {
         ...json.devDependencies,
         '@angular-builders/jest': `^${versions.angularBuildersJest}`
       };
-      const x = json;
     });
   };
 }
