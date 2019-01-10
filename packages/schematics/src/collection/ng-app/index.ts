@@ -6,8 +6,8 @@ import { Schema as Options } from './schema';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 
 import * as ng from './../../angular';
-import { removeKarma } from '../../rules/remove-karma';
-import { updateKarma } from '../../rules/update-karma';
+import { removeKarma } from '../../rules/karma';
+import { updateKarma } from '../../rules/karma';
 import { updateJsonFile } from '../../rules/update-json-file';
 
 const DEFAULT_APP_DIR = 'app';

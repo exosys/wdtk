@@ -16,7 +16,7 @@ import * as ng from './../../angular';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
 import { updateWorkspace } from '@schematics/angular/utility/config';
-import { removeKarma } from '../../rules/remove-karma';
+import { removeKarma } from '../../rules/karma';
 
 interface NormalizedOptions extends Options {
   newProjectRoot: string;
