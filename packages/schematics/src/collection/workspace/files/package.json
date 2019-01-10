@@ -24,12 +24,14 @@
     ]
   },
   "scripts": {
+    "wx":"wx",
     "build": "lerna run --concurrency 2 --stream build",
     "test": "lerna run --concurrency 2 --stream test"
   },
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@wdtk/cli":"^<% versions.wdtk %>",
     "lerna": "<%= versions.lerna %>"
   }
 }

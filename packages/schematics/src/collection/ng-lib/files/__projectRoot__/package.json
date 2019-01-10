@@ -12,6 +12,7 @@
   "metadata": "./dist/<%= dasherize(name) %>.metadata.json",
   "license": "MIT",
   "scripts": {
+    "wx": "wx",
     "ng": "ng",
     "build": "ng build <%= name %>",
     "test": "ng test <%= name %>",
