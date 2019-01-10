@@ -105,6 +105,13 @@ describe('Angular Application Schematic', () => {
     }
   });
 
+  it('should update the ts configuration files with the correct relative path to the workspace root', () => {
+    const tree: UnitTestTree = schematicRunner.runSchematic('ng-app', defaultApplicationOpts, workspaceTree);
+    const project = ng.getProject('foo-e2e', tree);
+    let tsconfig = JSON.parse(tree.readContent(`${project.root}/tsconfig.e2e.json`));
+    expect(tsconfig.extends).toMatch('../../../../tsconfig.json');
+  });
+
   it('should scope a new application to the workspace name', () => {
     const tree: UnitTestTree = schematicRunner.runSchematic('ng-app', { name: 'foo' }, workspaceTree);
     const appPkg = JSON.parse(tree.readContent('/pkg/app/foo/package.json'));

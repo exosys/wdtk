@@ -7,6 +7,7 @@ import { dasherize } from '@angular-devkit/core/src/utils/strings';
 
 import * as ng from './../../angular';
 import { removeKarma } from '../../rules/remove-karma';
+import { updateKarma } from '../../rules/update-karma';
 import { updateJsonFile } from '../../rules/update-json-file';
 
 const DEFAULT_APP_DIR = 'app';
@@ -37,8 +38,6 @@ export default function(options: Options): Rule {
       move(opts.ngAppProjectRoot, opts.wxAppProjectRoot),
       updateWorkspaceNgConf(opts),
       updateAppProjectNgConf(opts),
-      move(opts.ngE2eProjectRoot, opts.wxE2eProjectRoot),
-      updateE2eProjectNgConf(opts),
       updateJsonFile(`${projectRoot}/tsconfig.app.json`, (json: any) => {
         json.extends = `${relativePathToWorkspaceRoot}/tsconfig.json`;
         json.exclude.push('**/*-spec.ts');
@@ -47,7 +46,13 @@ export default function(options: Options): Rule {
       updateJsonFile(`${projectRoot}/tslint.json`, (json: any) => {
         json.extends = `${relativePathToWorkspaceRoot}/tslint.json`;
       }),
-      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : noop(),
+      move(opts.ngE2eProjectRoot, opts.wxE2eProjectRoot),
+      updateE2eProjectNgConf(opts),
+      updateJsonFile(`${opts.wxE2eProjectRoot}/tsconfig.e2e.json`, (json: any) => {
+        json.extends = `${relativePathToWorkspaceRoot}/../tsconfig.json`;
+        json.compilerOptions.outDir = `./../out/tsc`;
+      }),
+      opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : updateKarma(opts.name),
       opts.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
     ]);
   };
