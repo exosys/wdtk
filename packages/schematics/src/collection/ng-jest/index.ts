@@ -8,9 +8,11 @@ import { updateJsonFile } from '../../rules/update-json-file';
 import { versions } from '../../versions';
 
 export interface NormalizedOptions extends Options {
-  preset: string;
   coverageDirectory: string;
   projectRoot: string;
+  projectType: string;
+  moduleNameMapper: string;
+  relativePathToWorkspaceRoot: string;
 }
 
 export default function(options: Options): Rule {
@@ -27,7 +29,6 @@ export default function(options: Options): Rule {
           })
         ])
       ),
-      //import 'jest-preset-angular'; in test.js
       addDependencies(opts),
       updateProjectNgConf(opts)
     ]);
@@ -62,11 +63,7 @@ function updateProjectNgConf(opts: NormalizedOptions): Rule {
       }
       architect.test = {
         builder: '@angular-builders/jest:run',
-        options: {
-          // main: join(projectRoot, 'src', 'test.ts'),
-          // tsConfig: join(projectRoot, 'tsconfig.spec.json'),
-          // jestConfig: join(projectRoot, 'jest.config.js')
-        }
+        options: {}
       };
       architect.lint.options.tsConfig.push(join(projectRoot, 'tsconfig.spec.json'));
     }
@@ -78,15 +75,31 @@ function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
   let projectName: string = options.project;
   const project = ng.getProject(projectName, tree);
   const projectRoot = project.root;
+  const projectType = project.projectType;
+  let moduleNameMapper;
+  if (projectType === 'application') {
+    moduleNameMapper = {
+      '^src/(.*)': '<rootDir>/src/$1',
+      '^app/(.*)': '<rootDir>/src/app/$1',
+      '^assets/(.*)': '<rootDir>/src/assets/$1',
+      '^environments/(.*)': '<rootDir>/src/environments/$1'
+    };
+  } else {
+    moduleNameMapper = {
+      '^src/(.*)': '<rootDir>/src/$1'
+    };
+  }
 
+  moduleNameMapper = JSON.stringify(moduleNameMapper);
   //prettier-ignore
   const relativePathToWorkspaceRoot = projectRoot.split('/').map(x => '..').join('/');
-  const preset = `${relativePathToWorkspaceRoot}/jest.config.js`;
   const coverageDir = `${relativePathToWorkspaceRoot}/target/test/coverage`;
   return {
     ...options,
     projectRoot: projectRoot,
-    preset: preset,
-    coverageDirectory: coverageDir
+    projectType: projectType,
+    moduleNameMapper: moduleNameMapper,
+    coverageDirectory: coverageDir,
+    relativePathToWorkspaceRoot: relativePathToWorkspaceRoot
   };
 }

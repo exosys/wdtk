@@ -31,7 +31,8 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
-    "@wdtk/cli":"^<% versions.wdtk %>",
-    "lerna": "<%= versions.lerna %>"
+    "@wdtk/cli":"^<%= versions.wdtk %>",
+    "lerna": "<%= versions.lerna %>",
+    "typescript": "~<%= versions.typescript %>"
   }
 }

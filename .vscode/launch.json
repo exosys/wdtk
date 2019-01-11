@@ -43,6 +43,15 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "wx (generate component)",
+      "cwd": "${workspaceFolder}/work/sample/pkg/lib/common/secondary/src/lib",
+      "program": "${workspaceFolder}/packages/cli/bin/wx",
+      "args": ["generate", "component", "sample"],
+      "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "wx (help)",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["help"],
