@@ -1,6 +1,6 @@
 {
   "name": "@wdtk/builders",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Schematics and builders for @wdtk/angular apps.",
   "license": "MIT",
   "repository": {
