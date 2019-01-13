@@ -1,3 +1,10 @@
 src
 tsconfig.json
+tsconfig.spec.json
 tslint.js
+jest.config.json
+.vscode
+.prettierignore
+.prettierrc
+yarn-error.log
+
