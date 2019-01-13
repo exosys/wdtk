@@ -19,7 +19,7 @@
       "name": "wx (generate app)",
       "cwd": "${workspaceFolder}/work/sample",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
-      "args": ["generate", "ng-app", "www", "--skip-install", "--unitTestRunner=jest"],
+      "args": ["generate", "ng-app", "www", "--skip-install", "--unitTestRunner=jest", "--routing"],
       "outputCapture": "std"
     },
     {

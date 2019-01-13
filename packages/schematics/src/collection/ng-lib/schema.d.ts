@@ -1,15 +1,13 @@
+import { Schema as LibraryOptions } from '@schematics/angular/library/schema';
 import { UnitTestRunner } from '../../core/unit-test';
 
-export interface Schema {
-  name: string;
-  skipFormat?: boolean;
-  skipInstall?: boolean;
+export interface Schema extends LibraryOptions {
   directory?: string;
-  unitTestRunner?: UnitTestRunner;
-  style?: string;
-  prefix?: string;
-  routing?: boolean;
-  lazy?: boolean;
   parentModule?: string;
   project?: string;
+  routing?: boolean;
+  lazy?: boolean;
+  skipFormat?: boolean;
+  style?: string;
+  unitTestRunner?: UnitTestRunner;
 }

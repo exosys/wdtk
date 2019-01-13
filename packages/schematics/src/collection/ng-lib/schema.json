@@ -93,5 +93,5 @@
     }
   },
 
-  "required": []
+  "required": ["name"]
 }
