@@ -38,6 +38,12 @@ describe('Angular library schematic :', () => {
       expect(files).toContain('/pkg/lib/foo/ng-package.json');
     });
 
+    it("should create an 'index.ts' in the source directory", () => {
+      const tree = schematicRunner.runSchematic('ng-lib', defaultLibraryOptions, workspaceTree);
+      const files = tree.files;
+      expect(files).toContain('/pkg/lib/foo/src/index.ts');
+    });
+
     it('should update the angular workspace configuration', () => {
       const tree = schematicRunner.runSchematic('ng-lib', defaultLibraryOptions, workspaceTree);
       const project = ng.getProject('@bar/foo', tree);
