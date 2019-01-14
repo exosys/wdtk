@@ -23,8 +23,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@angular-devkit/schematics": "7.1.0",
-    "@schematics/angular": "7.1.0",
+    "@angular-devkit/core": "^7.2.1",
+    "@angular-devkit/schematics": "^7.2.1",
+    "@schematics/angular": "^7.2.1",
     "strip-json-comments": "2.0.1"
   },
   "devDependencies": {
