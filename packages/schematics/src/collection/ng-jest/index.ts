@@ -40,7 +40,9 @@ function addDependencies(opts: NormalizedOptions): Rule {
     return updateJsonFile(`${opts.projectRoot}/package.json`, (json: any) => {
       json.devDependencies = {
         ...json.devDependencies,
-        '@angular-builders/jest': `^${versions.angularBuildersJest}`
+        '@angular-builders/jest': `^${versions.angularBuildersJest}`,
+        'babel-core': `^${versions.babelCore}`,
+        'babel-jest': `^${versions.babelJest}`
       };
     });
   };
