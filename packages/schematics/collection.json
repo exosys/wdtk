@@ -37,6 +37,13 @@
       "description": "Add Jest configuration to the workspace",
       "hidden": true
     },
+    "ionic-application": {
+      "description": "Adds ionic support to an angular application.",
+      "aliases": ["ionic-app"],
+      "factory": "./lib/collection/ionic/application",
+      "schema": "./lib/collection/ionic/application/schema.json",
+      "hidden": true
+    },
     "library": {
       "aliases": ["lib"],
       "extends": "@schematics/angular:library"

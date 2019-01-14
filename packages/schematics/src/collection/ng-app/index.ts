@@ -53,7 +53,8 @@ export default function(options: Options): Rule {
         json.compilerOptions.outDir = `./../out/tsc`;
       }),
       opts.unitTestRunner !== 'karma' ? removeKarma(opts.name) : updateKarma(opts.name),
-      opts.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop()
+      opts.unitTestRunner === 'jest' ? schematic('ng-jest', { project: opts.name, skipInstall: opts.skipInstall }) : noop(),
+      opts.ionic === true ? schematic('ionic-application', { name: opts.name, skipInstall: true }) : noop()
     ]);
   };
 }
@@ -139,6 +140,7 @@ function normalizeOptions(tree: Tree, options: Options): NormalizedOptions {
     throw new SchematicsException(`Invalid options, "name" is required.`);
   }
 
+  // FIXME : verify that package.json exists and if not throw exception
   const workspaceConf = JSON.parse(tree.read('/package.json')!.toString());
   const workspaceName = workspaceConf.name;
   const workspaceRoot = workspaceConf.wx.newPackagesRoot;

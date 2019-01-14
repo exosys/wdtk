@@ -120,7 +120,13 @@
           }
         ]
       }
+    },
+    "ionic": {
+      "type": "boolean",
+      "default": false,
+      "description": "Adds ionic support to for the application."
     }
   },
+
   "required": ["name"]
 }

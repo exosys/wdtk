@@ -4,4 +4,5 @@ export interface Schema extends ApplicationOptions {
   skipFormat: boolean;
   unitTestRunner: UnitTestRunner;
   e2eTestRunner: E2eTestRunner;
+  ionic: boolean;
 }

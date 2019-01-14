@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "@wdtk/schematics/ionic/application",
+  "title": "Create Jest Configuration for the workspace",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the application.",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the application?"
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Do not install dependencies after adding the jest configuration.",
+      "default": false
+    }
+  },
+  "required": ["name"]
+}
