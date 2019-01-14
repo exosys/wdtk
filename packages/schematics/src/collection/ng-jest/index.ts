@@ -11,7 +11,6 @@ export interface NormalizedOptions extends Options {
   coverageDirectory: string;
   projectRoot: string;
   projectType: string;
-  moduleNameMapper: string;
   relativePathToWorkspaceRoot: string;
 }
 
@@ -78,21 +77,7 @@ function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
   const project = ng.getProject(projectName, tree);
   const projectRoot = project.root;
   const projectType = project.projectType;
-  let moduleNameMapper;
-  if (projectType === 'application') {
-    moduleNameMapper = {
-      '^src/(.*)': '<rootDir>/src/$1',
-      '^app/(.*)': '<rootDir>/src/app/$1',
-      '^assets/(.*)': '<rootDir>/src/assets/$1',
-      '^environments/(.*)': '<rootDir>/src/environments/$1'
-    };
-  } else {
-    moduleNameMapper = {
-      '^src/(.*)': '<rootDir>/src/$1'
-    };
-  }
 
-  moduleNameMapper = JSON.stringify(moduleNameMapper);
   //prettier-ignore
   const relativePathToWorkspaceRoot = projectRoot.split('/').map(x => '..').join('/');
   const coverageDir = `${relativePathToWorkspaceRoot}/target/test/coverage`;
@@ -100,7 +85,6 @@ function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
     ...options,
     projectRoot: projectRoot,
     projectType: projectType,
-    moduleNameMapper: moduleNameMapper,
     coverageDirectory: coverageDir,
     relativePathToWorkspaceRoot: relativePathToWorkspaceRoot
   };
