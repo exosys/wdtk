@@ -1,16 +1,16 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "@wdtk/schematics/page",
+  "id": "@wdtk/schematics/ionic/page",
   "title": "Adds a page to an angular/ionic project.",
   "type": "object",
   "properties": {
     "project": {
       "type": "string",
-      "description": "The name of the project",
+      "description": "The name of the project.",
       "$default": {
         "$source": "projectName"
       }
     }
   },
-  "required": ["project"]
+  "required": []
 }

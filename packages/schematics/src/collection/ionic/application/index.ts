@@ -1,7 +1,7 @@
 import { join, normalize, Path } from '@angular-devkit/core';
 import { strings } from '@angular-devkit/core';
 import { Rule, Tree, SchematicContext, MergeStrategy, SchematicsException } from '@angular-devkit/schematics';
-import { chain, move, mergeWith, apply, url, template, schematic, noop } from '@angular-devkit/schematics';
+import { chain, move, mergeWith, apply, url, template, schematic } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { Schema as Options } from './schema';
@@ -22,11 +22,10 @@ export interface NormalizedOptions extends Options {
 
 export default function(options: Options): Rule {
   return (tree: Tree) => {
-    // options.style
     return chain([
       schematic('ng-app', options), // first generate the angular application
-      applyChanges(options)
-      // schematic('page', { project: options.name })
+      applyChanges(options),
+      schematic('page', { project: options.name }) // add the home page
     ]);
   };
 }

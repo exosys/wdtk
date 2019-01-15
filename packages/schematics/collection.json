@@ -44,14 +44,18 @@
       "schema": "./lib/collection/ionic/application/schema.json",
       "hidden": true
     },
+    "page": {
+      "description": "Add a page to an ionic application.",
+      "aliases": ["pg"],
+      "factory": "./lib/collection/ionic/page",
+      "schema": "./lib/collection/ionic/page/schema.json",
+      "hidden": true
+    },
     "library": {
       "aliases": ["lib"],
       "extends": "@schematics/angular:library"
     },
-    "page": {
-      "aliases": ["pg"],
-      "extends": "@ionic/angular-toolkit:page"
-    },
+
     "class": {
       "aliases": ["cl"],
       "extends": "@schematics/angular:class"
