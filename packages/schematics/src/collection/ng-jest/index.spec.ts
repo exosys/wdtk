@@ -1,7 +1,7 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '../workspace/schema';
 import { Schema as ProjectOptions } from './schema';
-import * as ng from './../../angular';
+import * as ng from './../../core/ng';
 
 describe('ng-jest', () => {
   const schematicRunner = new SchematicTestRunner('@wdtk/schematics', require.resolve('../../../collection.json'));

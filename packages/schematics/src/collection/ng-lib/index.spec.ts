@@ -1,8 +1,8 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
 import { Schema as WorkspaceOptions } from '../workspace/schema';
 import { Schema as LibraryOptions } from './schema';
-import * as ng from './../../angular';
-import { Tree } from '@angular-devkit/schematics';
+
+import * as ng from './../../core/ng';
 
 function getJsonFileContent(projectName: string, relativePath: string, tree: UnitTestTree): any {
   const rootPkg = JSON.parse(tree.readContent('/package.json'));
