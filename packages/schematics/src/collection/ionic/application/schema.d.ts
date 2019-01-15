@@ -1,4 +1,2 @@
-export interface Schema {
-  name: string;
-  skipInstall?: boolean;
-}
+import { Schema as AngularAppSchema } from '../../ng-app/schema';
+export interface Schema extends AngularAppSchema {}
