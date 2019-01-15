@@ -12,7 +12,7 @@ import { mergeWith, apply, template, url, chain, move } from '@angular-devkit/sc
 import { Schema as Options } from './schema';
 import { join, normalize, Path } from '@angular-devkit/core';
 
-import * as ng from './../../angular';
+import * as ng from '../../core/ng';
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { updateJsonFile } from '../../rules/update-json-file';
 import { updateWorkspace } from '@schematics/angular/utility/config';

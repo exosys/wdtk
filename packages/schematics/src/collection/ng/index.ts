@@ -4,7 +4,7 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { Schema as Options } from './schema';
 import { updateJsonFile } from '../../rules/update-json-file';
-import * as ng from '../../angular';
+import * as ng from '../../core/ng';
 
 export interface NormalizedOptions extends Options {}
 

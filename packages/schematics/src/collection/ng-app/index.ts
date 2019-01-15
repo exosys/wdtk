@@ -5,7 +5,7 @@ import { Schema as Options } from './schema';
 
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 
-import * as ng from './../../angular';
+import * as ng from '../../core/ng';
 import { removeKarma } from '../../rules/karma';
 import { updateKarma } from '../../rules/karma';
 import { updateJsonFile } from '../../rules/update-json-file';

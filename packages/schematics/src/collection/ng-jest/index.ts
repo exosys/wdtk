@@ -2,7 +2,7 @@ import { join, normalize, Path, JsonException } from '@angular-devkit/core';
 import { Rule, Tree, SchematicsException, schematic } from '@angular-devkit/schematics';
 import { chain, mergeWith, apply, url, template } from '@angular-devkit/schematics';
 
-import * as ng from './../../angular';
+import * as ng from '../../core/ng';
 import { Schema as Options } from './schema';
 import { updateJsonFile } from '../../rules/update-json-file';
 import { versions } from '../../versions';
