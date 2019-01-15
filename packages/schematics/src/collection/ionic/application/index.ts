@@ -67,8 +67,8 @@ function updateProjectSources(opts: NormalizedOptions): Rule {
 
     const metadataChanges = [
       { field: 'imports', symbolName: 'IonicModule.forRoot()' },
-      { field: 'providers', symbolName: 'StatusBar' },
-      { field: 'providers', symbolName: 'SplashScreen' },
+      { field: 'providers', symbolName: 'StatusBar,' },
+      { field: 'providers', symbolName: 'SplashScreen,' },
       { field: 'providers', symbolName: '{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }' }
     ];
     metadataChanges.forEach(metadataChange => {
