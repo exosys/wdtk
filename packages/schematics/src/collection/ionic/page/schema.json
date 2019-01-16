@@ -10,6 +10,30 @@
       "$default": {
         "$source": "projectName"
       }
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the page",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "routePath": {
+      "type": "string",
+      "description": "The path to use for the route of the page",
+      "default": ""
+    },
+    "styleext": {
+      "type": "string",
+      "description": "The file extension of the style file for the page",
+      "default": "css"
+    },
+    "skipTests": {
+      "description": "Skip creating spec files.",
+      "type": "boolean",
+      "default": false,
+      "alias": "S"
     }
   },
   "required": []

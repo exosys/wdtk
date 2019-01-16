@@ -1,5 +1,5 @@
-import * as ts from '@schematics/angular/node_modules/typescript';
-import { SourceFile } from '@schematics/angular/node_modules/typescript';
+import * as ts from 'typescript';
+import { SourceFile } from 'typescript';
 import { Tree, SchematicsException } from '@angular-devkit/schematics';
 
 export function getSourceFile(tree: Tree, path: string): SourceFile {

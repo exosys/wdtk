@@ -25,6 +25,15 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "wx (generate ionic app)",
+      "cwd": "${workspaceFolder}/work/sample",
+      "program": "${workspaceFolder}/packages/cli/bin/wx",
+      "args": ["generate", "ionic-app", "www", "--debug", "--skip-install", "--unitTestRunner=jest", "--routing"],
+      "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "wx (generate lib)",
       "cwd": "${workspaceFolder}/work/sample",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
@@ -64,6 +73,13 @@
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["--version"],
       "outputCapture": "std"
+    }
+  ],
+
+  "compounds": [
+    {
+      "name": "generate ionic app",
+      "configurations": ["wx (new)", "wx (generate ionic app)"]
     }
   ]
 }
