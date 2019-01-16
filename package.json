@@ -17,7 +17,12 @@
     "~~release": "lerna version ",
     "release:patch": "yarn ~~release patch --only-explicit-updates",
     "changelog": "DO NOT USE -chan release --group-changes 0.0.1",
-    "rel": "lerna version"
+    "rel": "lerna version",
+    "work:remove": "run-script-os",
+    "work:create": "run-script-os",
+    "work:remove:win32": "rd work /s/ q",
+    "postwork:remove:win32": "yarn work:create:win32",
+    "work:create:win32": "mkdir work"
   },
   "workspaces": {
     "packages": [
@@ -29,6 +34,7 @@
     "@geut/chan": "^1.3.0",
     "typescript": "^3.2.2",
     "tslint": "^5.11.0",
-    "eslint": "^5.7.0"
+    "eslint": "^5.7.0",
+    "run-script-os": "^1.0.5"
   }
 }

@@ -26,10 +26,18 @@ export default function(options: Options): Rule {
       move(opts.path)
     ]);
 
-    return chain([branchAndMerge(chain([mergeWith(templateSource)]))]);
+    // prettier-ignore
+    return chain([
+      branchAndMerge(
+        chain([
+          updateRoutes(opts), 
+          mergeWith(templateSource)
+        ]))]);
   };
 }
-
+function updateRoutes(opts: NormalizedOptions): Rule {
+  return (tree: Tree) => {};
+}
 function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
   try {
     const project = ng.getProject(options.project, tree);
