@@ -1,8 +1,7 @@
-export interface Schema {
+import { ModuleOptions } from '@schematics/angular/utility/find-module';
+
+export interface Schema extends ModuleOptions {
   project: string;
-  name: string;
-  flat?: boolean;
-  path?: string;
   prefix?: string;
   selector?: string;
   routePath?: string;
