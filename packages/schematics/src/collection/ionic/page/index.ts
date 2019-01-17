@@ -7,8 +7,10 @@ import { buildDefaultPath } from '@schematics/angular/utility/project';
 import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
 import { Schema as Options } from './schema';
 import * as ng from '../../../core/ng';
-import * as ts from '../../../core/ts';
+import * as ts from 'typescript';
+import { getSourceFile } from './../../../util/typescript';
 import { buildRelativePath } from '@schematics/angular/utility/find-module';
+import { InsertChange } from '@schematics/angular/utility/change';
 export interface NormalizedOptions extends Options {
   selector: string;
   path: string;
@@ -39,16 +41,28 @@ export default function(options: Options): Rule {
   };
 }
 function updateRoutes(opts: NormalizedOptions): Rule {
-  const targetModulePath = opts.module;
-  if (!targetModulePath) {
-    throw new SchematicsException(`Unspecified module`);
+  if (opts.skipImport) {
+    return noop();
   }
   return (tree: Tree) => {
-    const source = ts.getSourceFile(tree, targetModulePath);
+    const routingModulePath = ng.findRoutingModuleFromOptions(tree, opts);
+    const routingModuleSource = getSourceFile(tree, routingModulePath);
+
     const path = `/${opts.path}/` + (opts.flat ? '' : `${strings.dasherize(opts.name)}/`) + `${strings.dasherize(opts.name)}.module`;
-    const relativePath = buildRelativePath(targetModulePath, path);
+    const relativePath = buildRelativePath(routingModulePath, path);
     const routePath = strings.dasherize(opts.routePath ? opts.routePath : opts.name);
     const routeLoadChildren = `${relativePath}#${strings.classify(opts.name)}PageModule`;
+
+    const changes = ng.addRouteToModule(routingModuleSource, routingModulePath, routePath, routeLoadChildren);
+    if (changes.length) {
+      const recorder = tree.beginUpdate(routingModulePath);
+      changes.forEach(change => {
+        if (change instanceof InsertChange) {
+          recorder.insertLeft(change.pos, change.toAdd);
+        }
+      });
+      tree.commitUpdate(recorder);
+    }
   };
 }
 function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
@@ -63,13 +77,13 @@ function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
 
   let selector = options.selector ? options.selector : buildSelector(options, project.prefix);
 
-  const module = ng.findRoutingModuleFromOptions(tree, options);
+  // const module = ng.findRoutingModuleFromOptions(tree, options);
   return {
     ...options,
     selector: selector,
     path: path,
-    name: name,
-    module: module
+    name: name
+    // module: module
   };
 }
 

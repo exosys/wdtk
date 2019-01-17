@@ -4,7 +4,7 @@ import { join, normalize } from '@angular-devkit/core';
 import { ModuleOptions } from '@schematics/angular/utility/find-module';
 
 const MODULE_EXT = '.module.ts';
-const ROUTING_MODULE_EXT = '.-routing.module.ts';
+const ROUTING_MODULE_EXT = '-routing.module.ts';
 
 export function findRoutingModule(tree: Tree, generateDir: string, routingModuleExt: string = ROUTING_MODULE_EXT): Path {
   let dir: DirEntry | null = tree.getDir(`/${generateDir}`);
@@ -23,10 +23,7 @@ export function findRoutingModule(tree: Tree, generateDir: string, routingModule
   throw new SchematicsException(`Could not find a routing NgModule. Use the '--skip-import' option to skip importing in NgModule.`);
 }
 
-export function findRoutingModuleFromOptions(tree: Tree, options: ModuleOptions): Path | undefined {
-  if (options.hasOwnProperty('skipImport') && options.skipImport) {
-    return undefined;
-  }
+export function findRoutingModuleFromOptions(tree: Tree, options: ModuleOptions): Path {
   if (!options.module) {
     const generateDir = (options.path || '') + (options.flat ? '' : '/') + strings.dasherize(options.name);
     return findRoutingModule(tree, generateDir);

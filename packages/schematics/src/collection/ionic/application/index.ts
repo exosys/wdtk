@@ -7,10 +7,11 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { Schema as Options } from './schema';
 import * as ng from '../../../core/ng';
 import * as wdtk from './../../../versions';
-import { NodeDependencyType, addProjectDependencies } from './../../../core/dependencies';
+import { NodeDependencyType, addProjectDependencies } from './../../../util/dependencies';
 
 import { insertImport, addSymbolToNgModuleMetadata } from '@schematics/angular/utility/ast-utils';
-import * as ts from '../../../core/ts';
+
+import { getSourceFile } from './../../../util/typescript';
 import { Change, InsertChange } from '@schematics/angular/utility/change';
 
 export interface NormalizedOptions extends Options {
@@ -48,7 +49,7 @@ function updateProjectSources(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
     const changes: Change[] = [];
     const appModulePath: Path = ng.findModule(tree, `${opts.sourceRoot}/app`);
-    const source = ts.getSourceFile(tree, appModulePath);
+    const source = getSourceFile(tree, appModulePath);
     const recorder = tree.beginUpdate(appModulePath);
 
     const modulesToImport = [
