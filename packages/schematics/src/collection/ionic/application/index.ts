@@ -11,7 +11,7 @@ import { NodeDependencyType, addProjectDependencies } from './../../../util/depe
 
 import { insertImport, addSymbolToNgModuleMetadata } from '@schematics/angular/utility/ast-utils';
 
-import { getSourceFile } from './../../../util/typescript';
+import { getSourceFile, updateSourceFile } from './../../../util/typescript';
 import { Change, InsertChange } from '@schematics/angular/utility/change';
 
 export interface NormalizedOptions extends Options {
@@ -50,7 +50,6 @@ function updateProjectSources(opts: NormalizedOptions): Rule {
     const changes: Change[] = [];
     const appModulePath: Path = ng.findModule(tree, `${opts.sourceRoot}/app`);
     const source = getSourceFile(tree, appModulePath);
-    const recorder = tree.beginUpdate(appModulePath);
 
     const modulesToImport = [
       { symbolName: 'RouteReuseStrategy', fileName: '@angular/router' },
@@ -77,14 +76,7 @@ function updateProjectSources(opts: NormalizedOptions): Rule {
       });
     });
 
-    //perform the changes
-    changes.forEach(change => {
-      if (change instanceof InsertChange) {
-        recorder.insertLeft(change.pos, change.toAdd);
-      }
-    });
-
-    tree.commitUpdate(recorder);
+    updateSourceFile(tree, source, changes);
   };
 }
 
