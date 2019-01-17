@@ -8,7 +8,7 @@ import { validateHtmlSelector, validateName } from '@schematics/angular/utility/
 import { Schema as Options } from './schema';
 import * as ng from '../../../core/ng';
 import * as ts from 'typescript';
-import { getSourceFile } from './../../../util/typescript';
+import { getSourceFile, updateSourceFile } from './../../../util/typescript';
 import { buildRelativePath } from '@schematics/angular/utility/find-module';
 import { InsertChange } from '@schematics/angular/utility/change';
 export interface NormalizedOptions extends Options {
@@ -53,16 +53,8 @@ function updateRoutes(opts: NormalizedOptions): Rule {
     const routePath = strings.dasherize(opts.routePath ? opts.routePath : opts.name);
     const routeLoadChildren = `${relativePath}#${strings.classify(opts.name)}PageModule`;
 
-    const changes = ng.addRouteToModule(routingModuleSource, routingModulePath, routePath, routeLoadChildren);
-    if (changes.length) {
-      const recorder = tree.beginUpdate(routingModulePath);
-      changes.forEach(change => {
-        if (change instanceof InsertChange) {
-          recorder.insertLeft(change.pos, change.toAdd);
-        }
-      });
-      tree.commitUpdate(recorder);
-    }
+    const changes = ng.addRouteToModule(routingModuleSource, routePath, routeLoadChildren);
+    updateSourceFile(tree, routingModuleSource, changes);
   };
 }
 function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
@@ -77,13 +69,11 @@ function normalizeOptions(options: Options, tree: Tree): NormalizedOptions {
 
   let selector = options.selector ? options.selector : buildSelector(options, project.prefix);
 
-  // const module = ng.findRoutingModuleFromOptions(tree, options);
   return {
     ...options,
     selector: selector,
     path: path,
     name: name
-    // module: module
   };
 }
 

@@ -2,8 +2,9 @@ import { Change, InsertChange } from '@schematics/angular/utility/change';
 import { findNodes } from '@schematics/angular/utility/ast-utils';
 import * as ts from 'typescript';
 
-export function addRouteToModule(moduleSource: ts.SourceFile, modulePath: string, routePath: string, routeLoadChildren: string): Change[] {
+export function addRouteToModule(moduleSource: ts.SourceFile, routePath: string, routeLoadChildren: string): Change[] {
   const result: Change[] = [];
+
   const statements = findNodes(moduleSource, ts.SyntaxKind.VariableStatement);
   for (const statement of statements) {
     if (ts.isVariableStatement(statement)) {
@@ -16,14 +17,16 @@ export function addRouteToModule(moduleSource: ts.SourceFile, modulePath: string
         if (!lastRouteNode) {
           lastRouteNode = node;
           result.push(
-            new InsertChange(modulePath, lastRouteNode.getEnd(), `\n{ path:'', redirectTo:'${routePath}', pathMatch:'full' },\n`)
+            new InsertChange(moduleSource.fileName, lastRouteNode.getEnd(), `\n{ path:'', redirectTo:'${routePath}', pathMatch:'full' },\n`)
           );
         } else {
           if (lastRouteNode.kind !== ts.SyntaxKind.CommaToken) {
-            result.push(new InsertChange(modulePath, lastRouteNode.getEnd(), ','));
+            result.push(new InsertChange(moduleSource.fileName, lastRouteNode.getEnd(), ','));
           }
         }
-        result.push(new InsertChange(modulePath, lastRouteNode.getEnd(), `{ path:'${routePath}', loadChildren:'${routeLoadChildren}' }\n`));
+        result.push(
+          new InsertChange(moduleSource.fileName, lastRouteNode.getEnd(), `{ path:'${routePath}', loadChildren:'${routeLoadChildren}' }\n`)
+        );
       }
     }
   }
