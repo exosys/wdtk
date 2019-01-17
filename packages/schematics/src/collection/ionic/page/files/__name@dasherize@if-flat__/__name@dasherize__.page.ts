@@ -4,7 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';<% } %>
 @Component({
   selector: '<%= selector %>',
   templateUrl: './<%= dasherize(name) %>.page.html',
-  styleUrls: ['./<%= dasherize(name) %>.page.<%= styleext %>'],
+  styleUrls: ['./<%= dasherize(name) %>.page.<%= style %>'],
 })
 export class <%= classify(name) %>Page implements OnInit {<% if(routePath) { %>
 

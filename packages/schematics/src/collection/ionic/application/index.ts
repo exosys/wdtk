@@ -26,7 +26,7 @@ export default function(options: Options): Rule {
     return chain([
       schematic('ng-app', options), // first generate the angular application
       applyChanges(options),
-      schematic('page', { project: options.name, name: 'home' }) // add the home page
+      schematic('page', { project: options.name, name: 'Home', style: 'scss' }) // add the home page
     ]);
   };
 }

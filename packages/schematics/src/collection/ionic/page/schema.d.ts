@@ -5,7 +5,7 @@ export interface Schema extends ModuleOptions {
   prefix?: string;
   selector?: string;
   routePath?: string;
-  styleext?: string;
+  style?: string;
 
   /**
    * When true, does not create "spec.ts" test files for the app.
