@@ -9,5 +9,5 @@ export const versions = {
   angularBuildersJest: '7.1.2',
   babelCore: '6.0.0',
   babelJest: '23.0.0',
-  typescript: '3.1.6'
+  typescript: '3.2.2'
 };

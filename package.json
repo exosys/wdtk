@@ -7,8 +7,11 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "postinstall": "yarn work:create",
     "clean": "lerna run --concurrency 5 --stream clean",
-    "clean-all": "yarn clean && lerna clean --yes && node ./scripts/rimraf ./node_modules",
+    "clean-all": "yarn work:remove && yarn clean && lerna clean --yes && yarn ~os:clean",
+    "~os:clean": "run-script-os",
+    "clean-all:win32": "rd node_modules /s /q 2>nul",
     "watch": "lerna run --parallel watch",
     "build": "lerna run --concurrency 5 --stream build",
     "ci": "yarn publish:main",
@@ -17,12 +20,10 @@
     "~~release": "lerna version ",
     "release:patch": "yarn ~~release patch --only-explicit-updates",
     "changelog": "DO NOT USE -chan release --group-changes 0.0.1",
-    "rel": "lerna version",
     "work:remove": "run-script-os",
-    "work:create": "run-script-os",
+    "work:create": "mkdir work",
     "work:remove:win32": "rd work /s/ q",
-    "postwork:remove:win32": "yarn work:create:win32",
-    "work:create:win32": "mkdir work"
+    "postwork:remove:win32": "yarn work:create:win32"
   },
   "workspaces": {
     "packages": [
