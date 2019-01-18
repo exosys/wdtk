@@ -1,10 +1,24 @@
 import { Rule, Tree, SchematicContext, SchematicsException, MergeStrategy, noop } from '@angular-devkit/schematics';
 import { chain, mergeWith, apply, url, template, filter } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-
+import { NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { Schema as Options } from './schema';
 import { updateJsonFile } from '../../rules/update-json-file';
+import { addWorkspaceDependencies } from './../../util/dependencies';
 import * as ng from '../../core/ng';
+
+const versions = {
+  ...ng.versions
+};
+// '@angular/compiler': `${ng.versions.Angular}`
+const ROOT_DEPENDENCIES = [
+  { type: NodeDependencyType.Dev, name: '@angular/compiler', version: `${versions.Angular}` },
+  { type: NodeDependencyType.Dev, name: '@angular/compiler-cli', version: `${versions.Angular}` },
+  { type: NodeDependencyType.Dev, name: '@angular-devkit/core', version: `${versions.Angular}` },
+  { type: NodeDependencyType.Dev, name: '@angular-devkit/architect', version: `${versions.DevkitBuildAngular}` },
+  { type: NodeDependencyType.Dev, name: '@angular-devkit/build-angular', version: `${versions.DevkitBuildAngular}` },
+  { type: NodeDependencyType.Dev, name: '@angular-devkit/schematics', version: `${versions.Angular}` }
+];
 
 export interface NormalizedOptions extends Options {}
 
@@ -30,12 +44,7 @@ export default function(options: Options): Rule {
 
 function addDependencies(opts: NormalizedOptions): Rule {
   return (tree: Tree) => {
-    return updateJsonFile('/package.json', (json: any) => {
-      json.devDependencies = {
-        ...json.devDependencies,
-        '@angular/compiler': `${ng.versions.Angular}`
-      };
-    });
+    addWorkspaceDependencies(tree, ROOT_DEPENDENCIES);
   };
 }
 function addInstallTask(opts: NormalizedOptions): Rule {

@@ -46,7 +46,7 @@
       "type": "node",
       "request": "launch",
       "name": "wx (generate lib)",
-      "cwd": "${workspaceFolder}/work/sample",
+      "cwd": "${workspaceFolder}/work",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
       "args": ["generate", "ng-lib", "common", "--skipInstall", "--unitTestRunner=jest"],
       "outputCapture": "std"

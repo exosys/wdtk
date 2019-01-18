@@ -1,6 +1,6 @@
 export const versions = {
   lerna: '3.4.3',
-  wdtk: '0.0.10',
+  wdtk: '0.1.3',
   ionicAngular: '4.0.0-rc.1',
   ionicAngularToolkit: '1.2.0',
   ionicNative: '5.0.0-beta.21',
