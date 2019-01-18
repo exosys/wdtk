@@ -7,6 +7,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "postinstall": "yarn work:create",
     "clean": "lerna run --concurrency 5 --stream clean",
     "clean-all": "yarn clean && lerna clean --yes && yarn ~os:clean",
     "~os:clean": "run-script-os",
