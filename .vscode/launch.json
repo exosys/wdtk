@@ -18,9 +18,9 @@
       "type": "node",
       "request": "launch",
       "name": "wx (generate app)",
-      "cwd": "${workspaceFolder}/work/sample",
+      "cwd": "${workspaceFolder}/work",
       "program": "${workspaceFolder}/packages/cli/bin/wx",
-      "args": ["generate", "ng-app", "www", "--debug", "--skip-install", "--unitTestRunner=jest", "--routing", "--ionic"],
+      "args": ["generate", "ng-app", "www", "--debug", "--skip-install", "--unitTestRunner=jest", "--routing"],
       "outputCapture": "std"
     },
     {

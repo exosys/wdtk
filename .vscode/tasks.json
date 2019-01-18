@@ -12,7 +12,7 @@
         "cwd": "${workspaceFolder}"
       },
       "presentation": {
-        "reveal": "never"
+        "reveal": "always"
       },
       "problemMatcher": []
     }

@@ -23,7 +23,7 @@
     "work:remove": "run-script-os",
     "work:create": "mkdir work",
     "work:remove:win32": "rd work /s/ q",
-    "postwork:remove:win32": "yarn work:create:win32"
+    "postwork:remove:win32": "yarn work:create"
   },
   "workspaces": {
     "packages": [
