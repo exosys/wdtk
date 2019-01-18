@@ -45,7 +45,7 @@
     "@angular/cli": "^7.2.2",
     "@angular-devkit/core": "^7.2.2",
     "@angular-devkit/schematics": "^7.2.2",
-    "@angular-devkit/architect": "~0.12.1",
+    "@angular-devkit/architect": "~0.12.2",
     "@schematics/angular": "^7.2.2",
     "@wdtk/builders": "^0.1.2",
     "@wdtk/schematics": "^0.1.2",

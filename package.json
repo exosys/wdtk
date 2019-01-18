@@ -7,11 +7,10 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "postinstall": "yarn work:create",
     "clean": "lerna run --concurrency 5 --stream clean",
-    "clean-all": "yarn work:remove && yarn clean && lerna clean --yes && yarn ~os:clean",
+    "clean-all": "yarn clean && lerna clean --yes && yarn ~os:clean",
     "~os:clean": "run-script-os",
-    "clean-all:win32": "rd node_modules /s /q 2>nul",
+    "clean-all:win32": "rd node_modules /s /q 2>nul && rd work /s/q",
     "watch": "lerna run --parallel watch",
     "build": "lerna run --concurrency 5 --stream build",
     "ci": "yarn publish:main",
@@ -31,7 +30,11 @@
     ]
   },
   "dependencies": {
-    "typescript": "^3.2.2"
+    "@angular-devkit/architect": "~0.12.2",
+    "@angular-devkit/core": "7.2.2",
+    "@angular-devkit/schematics": "7.2.2",
+    "@schematics/angular": "7.2.2",
+    "typescript": "3.2.2"
   },
   "devDependencies": {
     "lerna": "~3.4.0",
