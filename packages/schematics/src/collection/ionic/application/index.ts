@@ -34,7 +34,7 @@ export default function(options: Options): Rule {
 function applyChanges(options: Options): Rule {
   return (tree: Tree) => {
     const opts = normalizeOptions(options, tree);
-    const templateSource = apply(url('./files/src'), [template({ ...opts, classify: strings.classify }), move(opts.sourceRoot)]);
+    const templateSource = apply(url('./files/sourceRoot'), [template({ ...opts, classify: strings.classify }), move(opts.sourceRoot)]);
     return chain([
       mergeWith(templateSource, MergeStrategy.Overwrite),
       addDependencies(opts),
