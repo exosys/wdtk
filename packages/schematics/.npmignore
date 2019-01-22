@@ -8,3 +8,4 @@ jest.config.json
 .prettierrc
 yarn-error.log
 
+!files/src
