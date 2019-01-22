@@ -2,8 +2,10 @@ src
 tsconfig.json
 tsconfig.spec.json
 tslint.js
-jest.config.json
+jest.config.js
 .vscode
 .prettierignore
 .prettierrc
 yarn-error.log
+
+!lib/**/*.*
