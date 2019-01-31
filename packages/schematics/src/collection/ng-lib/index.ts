@@ -122,7 +122,7 @@ export default function(options: Options): Rule {
               compilerOptions.paths = {};
             }
             compilerOptions.paths[opts.name] = [`${opts.projectRoot}/src/`];
-            compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/src/*`];
+            compilerOptions.paths[`${opts.name}/*`] = [`${opts.projectRoot}/*/src/`];
           })
         : noop(),
       opts.entryType === 'secondary'
